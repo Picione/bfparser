@@ -65,4 +65,10 @@ var lsParseObj=[
         {"skillid":"xp gained increase%", "skillref":["xp gained increase%", "!% QUEST EXP+"]},
 		{"skillid":"damage dealt threshold activation", "skillref":["increase bb gauge", "!BC fill when DEALT ", "damage threshold activation", "! DMG"]},
 		{"skillid":"damage threshold activation", "skillref":["increase bb gauge", "!BC fill when TAKEN ", "damage threshold activation", "! DMG"]},
+		{"skillid":"hc receive count activation", "skillref":["increase bb gauge", "!BC fill when RECEIVE ", "hc receive count activation", "! HC"]},
+		{"skillid":"hp% recover on enemy defeat low", "skillref":["!Heal ", "hp% recover on enemy defeat low", "!-", "hp% recover on enemy defeat high", "!% HP when Enemy DEFEATED"]},
+		{"skillid":"hp% recover on battle win low", "skillref":["!Heal ", "hp% recover on battle win low", "!-", "hp% recover on battle win high", "!% HP when Battle WON"]},
+		{"skillid":"battle end bc fill low", "skillref":["battle end bc fill low", "!-", "battle end bc fill high", "!% BC Fill when Battle WON"]},
+		{"skillid":"target% chance", "skillref":["target% chance", "!% Chance to be Targeted"]},
+		{"skillid":"additional actions", "skillref":["additional actions", "! Action+"]},
       ];
