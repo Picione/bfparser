@@ -60,7 +60,6 @@
 <div style="min-height:55px;"></div>
 
 <input type="text" id="refID" class="form-control" placeholder="refID">
-<button type="button" id="newBtn" class="btn btn-default">Only New</button>
 <button type="button" id="exportBtn" class="btn btn-default">Export</button>
 <button type="button" id="clearBtn" class="btn btn-default">Clear</button>
 
@@ -68,42 +67,27 @@
 <font color="#FF0004"><i>*Credit to Deathmax for Datamining</br>
 *Please note that the details are expected to change during the maintenance. Recheck at<a href="http://touchandswipe.github.io/bravefrontier/unitsguide"> BFPros Unit Guide</a> after the maintenance.​</i></font>
 <script type="text/javascript">
-var serverSelect="http://picione.github.io/bravefrontier_data/jp/info.json";
+var serverSelect="http://picione.github.io/bravefrontier_data/info.json";
 var onlyNew=false;
-$(document).on("click","#clearBtn", function(e) {
-  onlyNew==true;
-})
 $(document).on("click","#clearBtn", function(e) {
   $('#rawText').empty();
 })
 $(document).on("click","#exportBtn", function(e) {
 $.getJSON( serverSelect, function( unit ) {
     /*Process for Each Unit*/
-    if (onlyNew) {
-	var rangeID=knownUN;
-	} else {
 	var rangeID=parseInt($("#refID").val());
-	}
 	$.each( unit, function( unitKey, valObj ) {
         var exportSTR='';
-        if (onlyNew) {
-		if ((valObj.guide_id >= rangeID) && (valObj.rarity >= 6)) {
+        if (valObj.guide_id == rangeID) {
             var idFound=true;
         } else {
             var idFound=false;
         }
-		} else {
-		if (valObj.guide_id == rangeID) {
-            var idFound=true;
-        } else {
-            var idFound=false;
-        }
-		}
-        /*Parsing code here*/
+		/*Parsing code here*/
         if (idFound) {
           /*Thumb*/
 		    exportSTR+='<center>';
-            exportSTR+='<img src="http://v2.cdn.android.brave.a-lim.jp//unit/img/unit_ills_thum_'+unitKey+'.png"/></br>';
+            exportSTR+='<img src="http://2.cdn.bravefrontier.gumi.sg/content/unit/img/unit_ills_thum_'+unitKey+'.png"/></br>';
           /*ID*/
             exportSTR+='Guide ID: '+valObj.guide_id;
 			
