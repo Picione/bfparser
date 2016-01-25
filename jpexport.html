@@ -31,10 +31,11 @@
 <script src="js/skillParse.js"></script>
 <script src="js/buffParse.js"></script>
 <script src="js/arrayParse.js"></script>
+<script src="js/knownESIT.js"></script>
 <script src="js/findAS.js"></script>
+<script src="js/findAI.js"></script>
 <script src="js/findPS.js"></script>
 <script src="js/findBuff.js"></script>
-<script src="js/knownESIT.js"></script>
 </head>
 
 <!-- MAIN BODY CONTENT -->
@@ -67,7 +68,7 @@
 <font color="#FF0004"><i>*Credit to Deathmax for Datamining</br>
 *Please note that the details are expected to change during the maintenance. Recheck at<a href="http://touchandswipe.github.io/bravefrontier/unitsguide"> BFPros Unit Guide</a> after the maintenance.​</i></font>
 <script type="text/javascript">
-var serverSelect="http://picione.github.io/bravefrontier_data/jp/info.json";
+var serverSelect="http://picione.github.io/bravefrontier_data/info.json";
 var onlyNew=false;
 $(document).on("click","#clearBtn", function(e) {
   onlyNew==true;
@@ -149,11 +150,11 @@ $.getJSON( serverSelect, function( unit ) {
           exportSTR+='';
         if (valObj["leader skill"]){
 		exportSTR+="<b>LS</b></br> ";
-		exportSTR+=findPSkill(valObj["leader skill"])+"</br>";
+		exportSTR+=findPSkill(valObj["leader skill"], "LS")+"</br>";
 		 }
 		 if (valObj["extra skill"]){
 	    exportSTR+="<b>ES</b></br> ";
-		exportSTR+=findPSkill(valObj["extra skill"])+"</br>";
+		exportSTR+=findPSkill(valObj["extra skill"], "ES")+"</br>";
 		 }
        /*Parsing all BB Skills*/
           for (ibb in bbArray) {
@@ -178,9 +179,13 @@ $.getJSON( serverSelect, function( unit ) {
         }
         if (valObj[bbArray[ibb]])
             if (valObj[bbArray[ibb]].levels[9]["effects"]) 
-			exportSTR+=findASkill(valObj[bbArray[ibb]].levels[9]["effects"])+'</br>'; /*BB Types Loop*/
+			exportSTR+=findASkill(valObj[bbArray[ibb]].levels[9]["effects"], valObj)+'</br>';
+			/*BB Types Loop*/
 		  }
-          $("#rawText").append(exportSTR+'</br></br>');
+		  
+	    /* Arena Type */
+	    exportSTR+='</br>AI: '+findAI(valObj);
+		$("#rawText").append(exportSTR+'</br></br>');
         } /*End range check*/
 })
 })

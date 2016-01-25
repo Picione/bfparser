@@ -58,7 +58,6 @@
 <div class="container-fluid" style="margin:0px;padding:5px;">
 <div style="min-height:55px;"></div>
 
-<input type="text" id="refID" class="form-control" placeholder="refID">
 <button type="button" id="exportBtn" class="btn btn-default">Export</button>
 <button type="button" id="clearBtn" class="btn btn-default">Clear</button>
 
@@ -73,10 +72,10 @@ $(document).on("click","#clearBtn", function(e) {
 $(document).on("click","#exportBtn", function(e) {
 $.getJSON( serverSelect, function( unit ) {
     /*Process for Each Unit*/
-    var rangeID=parseInt($("#refID").val());
     $.each( unit, function( unitKey, valObj ) {
         var exportSTR='';
 		var newBuff=false;
+		var indexTXT="+ Undefined effect(s)[";
         if (valObj.rarity == 7) {
             var idFound=true;
         } else {
@@ -85,16 +84,19 @@ $.getJSON( serverSelect, function( unit ) {
         /*Parsing code here*/
         if (idFound) {
 		 if (valObj["leader skill"]){
-		 findPSkill(valObj["leader skill"]);
+		 if (findPSkill(valObj["leader skill"], "LS").indexOf(indexTXT) != -1)
+		 	newBuff=true;
 		 }
 		 if (valObj["extra skill"]){
-	     findPSkill(valObj["extra skill"]);
+	     if (findPSkill(valObj["extra skill"], "ES").indexOf(indexTXT) != -1)
+		 	newBuff=true;
 		 }
        /*Parsing all BB Skills*/
           for (ibb in bbArray) {
         if (valObj[bbArray[ibb]])
             if (valObj[bbArray[ibb]].levels[9]["effects"]) 
-			findASkill(valObj[bbArray[ibb]].levels[9]["effects"]); /*BB Types Loop*/
+			if (findASkill(valObj[bbArray[ibb]].levels[9]["effects"], valObj).indexOf(indexTXT) != -1)
+				newBuff=true; /*BB Types Loop*/
 		  }
 		  if (newBuff) {
           /*Thumb*/

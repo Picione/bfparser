@@ -1,4 +1,4 @@
-function findASkill(objectAS) {
+function findASkill(objectAS, valObj) {
 		  var bbSkillFound=0;
 		  bbFound=false;
           var functionSTR="       ";
