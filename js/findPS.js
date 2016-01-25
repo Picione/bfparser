@@ -1,49 +1,54 @@
-function findPSkill(objectPS) {
+function findPSkill(objectPS, type) {
 		  /*Parsing LS Skills*/
 		  var functionSTR="";
-		  var eSkill=true;
+  		  var eSkill=false;
+		  if (type == "ES")
+		  		eSkill=true;
+		  var conef="effects";
+		  if (type == "IT")
+		  		conef="effect";
           var lsSkillFound=0;
           var genderTemp="";
-          if (objectPS) 
-              if (objectPS["effects"]) {
+          if (objectPS) {
+              if (objectPS[conef]) {
               for (pi=0;pi<lsParseObj.length;pi++) {
                 var skillSeek=lsParseObj[pi]["skillid"];
                 /*looking each effect array*/
-                for (pj=0;pj<objectPS["effects"].length;pj++) {
+                for (pj=0;pj<objectPS[conef].length;pj++) {
                     /*resets var for each effect*/
-                    var lsPassiveID=objectPS["effects"][pj]['passive id'];
+                    var lsPassiveID=objectPS[conef][pj]['passive id'];
                     var groupSTR="";
 					var conSTR="";
                     var effectFound=false;
                     var triggerSkill="";
 					if (eSkill) {
-						for (conType=0;conType<objectPS["effects"][pj]["conditions"].length;conType++){
-						if (objectPS["effects"][pj]["conditions"][conType]["item required"]) {
+						for (conType=0;conType<objectPS[conef][pj]["conditions"].length;conType++){
+						if (objectPS[conef][pj]["conditions"][conType]["item required"]) {
 							    conSTR+="[items(";
-							for (conCount=0;conCount<objectPS["effects"][pj]["conditions"][conType]["item required"].length;conCount++) {
+							for (conCount=0;conCount<objectPS[conef][pj]["conditions"][conType]["item required"].length;conCount++) {
 							    if (conCount>0) conSTR+=",";
-								conSTR+=objectPS["effects"][pj]["conditions"][conType]["item required"][conCount];
+								conSTR+=objectPS[conef][pj]["conditions"][conType]["item required"][conCount];
 							}
 								conSTR+=")]";
 						}
-						if (objectPS["effects"][pj]["conditions"][conType]["unit required"]) {
+						if (objectPS[conef][pj]["conditions"][conType]["unit required"]) {
 							    conSTR+="[units(";
-							for (conCount=0;conCount<objectPS["effects"][pj]["conditions"][conType]["unit required"].length;conCount++) {
+							for (conCount=0;conCount<objectPS[conef][pj]["conditions"][conType]["unit required"].length;conCount++) {
 							    if (conCount>0) conSTR+=",";
-								conSTR+=objectPS["effects"][pj]["conditions"][conType]["unit required"][conCount];
+								conSTR+=objectPS[conef][pj]["conditions"][conType]["unit required"][conCount];
 							}
 								conSTR+=")]";
 						}
 						}
 					}
-					if (objectPS["effects"][pj]["triggered effect"])
-						triggerSkill+='<i>'+findASkill(objectPS["effects"][pj]["triggered effect"])+'</i>';
-					if (objectPS["effects"][pj]["spark count buff activation"] || objectPS["effects"][pj]["hp below % buff activation"] || objectPS["effects"][pj]["damage threshold buff activation"] || objectPS["effects"][pj]["damage dealt threshold buff activation"] || objectPS["effects"][pj]["hc receive count buff activation"])
-						triggerSkill+='<i>'+findBuff(objectPS["effects"][pj]["buff"])+'</i>';
+					if (objectPS[conef][pj]["triggered effect"])
+						triggerSkill+='<i>'+findASkill(objectPS[conef][pj]["triggered effect"])+'</i>';
+					if (objectPS[conef][pj]["spark count buff activation"] || objectPS[conef][pj]["hp below % buff activation"] || objectPS[conef][pj]["damage threshold buff activation"] || objectPS[conef][pj]["damage dealt threshold buff activation"] || objectPS[conef][pj]["hc receive count buff activation"])
+						triggerSkill+='<i>'+findBuff(objectPS[conef][pj]["buff"])+'</i>';
 					/*Check collective group buff*/
                     if (skillSeek=="stats buff") {
                       for (ix in lsstatsBuffArray) {
-                          $.each( objectPS["effects"][pj], function( effectKey, effectVal ) {
+                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                             if (effectKey==lsstatsBuffArray[ix]["skillid"]) {
                               groupSTR+=effectVal+lsstatsBuffArray[ix]["suffix"];
                               effectFound=true;
@@ -51,7 +56,7 @@ function findPSkill(objectPS) {
                           })
                       }
                       /*checks unique elements requirements*/
-                      $.each( objectPS["effects"][pj], function( effectKey, effectVal ) {
+                      $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                         if (effectKey=="unique elements required")
                           groupSTR+=" ("+effectVal+" elements required)";
                         if (effectKey=="bb gauge above % buff requirement")
@@ -66,12 +71,16 @@ function findPSkill(objectPS) {
                           genderTemp=effectVal.toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
                           groupSTR+=" ("+genderTemp+")";
                         }
+						if (effectKey=="unit type buffed") {
+                          genderTemp=effectVal.toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+                          groupSTR+=" ("+genderTemp+")";
+                        }
                       })
                     } /*End Grouping check*/
                     /*Check collective group crystals buff*/
                     else if (skillSeek=="crystals buff") {
                       for (ix in lsCrystalsBuffArray) {
-                          $.each( objectPS["effects"][pj], function( effectKey, effectVal ) {
+                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                             if (effectKey==lsCrystalsBuffArray[ix]["skillid"]) {
                               groupSTR+=effectVal+lsCrystalsBuffArray[ix]["suffix"];
                               effectFound=true;
@@ -82,7 +91,7 @@ function findPSkill(objectPS) {
                     /*Check collective ails buff*/
                     else if (skillSeek=="ails") {
                       for (ix in lsailsArray) {
-                          $.each( objectPS["effects"][pj], function( effectKey, effectVal ) {
+                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                             if (effectKey==lsailsArray[ix]["skillid"]) {
                               groupSTR+=effectVal+lsailsArray[ix]["suffix"];
                               effectFound=true;
@@ -96,7 +105,7 @@ function findPSkill(objectPS) {
                       var resistCount=0;
 					  var resistCount2=0;
                       for (ix in lsailsResistArray) {
-                          $.each( objectPS["effects"][pj], function( effectKey, effectVal ) {
+                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                             if (effectKey==lsailsResistArray[ix]["skillid"]) {
 								effectFound=true;
 								if (resistCount>0)
@@ -120,7 +129,7 @@ function findPSkill(objectPS) {
                       var resistCount=0;
 					  var resistCount2=0;
                       for (ix in lsdbResistArray) {
-                          $.each( objectPS["effects"][pj], function( effectKey, effectVal ) {
+                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                             if (effectKey==lsdbResistArray[ix]["skillid"]) {
 								effectFound=true;
 								if (resistCount>0)
@@ -143,7 +152,7 @@ function findPSkill(objectPS) {
                     else if (skillSeek=="element mitigate") {
                       var elementCount=0;
                       for (ix in lsElementMitiArray) {
-                          $.each( objectPS["effects"][pj], function( effectKey, effectVal ) {
+                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                             if (effectKey==lsElementMitiArray[ix]["skillid"]) {
                                 if (elementCount>0)
                                   groupSTR+=",";
@@ -166,7 +175,7 @@ function findPSkill(objectPS) {
                     else if (skillSeek=="element weakness") {
                       var elementCount=0;
                       for (ix in lsWeakElementArray) {
-                          $.each( objectPS["effects"][pj], function( effectKey, effectVal ) {
+                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                             if (effectKey==lsWeakElementArray[ix]["skillid"]) {
                                 if (elementCount>0)
                                   groupSTR+=",";
@@ -188,7 +197,7 @@ function findPSkill(objectPS) {
                     /*Check collective xturns buff*/
                     else if (skillSeek=="xturns buff") {
                       for (ix in lsXTurnsArray) {
-                          $.each( objectPS["effects"][pj], function( effectKey, effectVal ) {
+                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                             if (effectKey==lsXTurnsArray[ix]["skillid"]) {
                               groupSTR+=effectVal+lsXTurnsArray[ix]["suffix"];
                               effectFound=true;
@@ -201,7 +210,7 @@ function findPSkill(objectPS) {
 					else if (skillSeek=="triggered effect") {
 					  var TriggerCount=0;
                       for (ix in esTrigger) {
-                          $.each( objectPS["effects"][pj], function( effectKey, effectVal ) {
+                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                              if(effectKey==esTrigger[ix]["skillid"]) {
 								if (TriggerCount>0)
                                   groupSTR+=",";
@@ -221,7 +230,7 @@ function findPSkill(objectPS) {
                     
                     else
                   /*looping non grouping buff*/
-                  $.each( objectPS["effects"][pj], function( effectKey, effectVal ) {
+                  $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                     if (effectKey==skillSeek) {
                       effectFound=true;
                     }
@@ -250,8 +259,8 @@ function findPSkill(objectPS) {
                         } else {
                           /*handling identified obj value*/
                           var callObjName=lsParseObj[pi]["skillref"][k];
-                          if (objectPS["effects"][pj][callObjName]) {
-                              var exportValue=objectPS["effects"][pj][callObjName];
+                          if (objectPS[conef][pj][callObjName]) {
+                              var exportValue=objectPS[conef][pj][callObjName];
                               if (callObjName=="element buffed")
                                 exportValue=exportValue.toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
                               /*value replacement and formatting*/
@@ -286,14 +295,14 @@ function findPSkill(objectPS) {
                               }
                               functionSTR+=exportValue;
                           }
-                          else if (objectPS["effects"][pj][callObjName]==0)
-                            functionSTR+=objectPS["effects"][pj][callObjName];
+                          else if (objectPS[conef][pj][callObjName]==0)
+                            functionSTR+=objectPS[conef][pj][callObjName];
                           else
                             functionSTR+='Unknown';
                         }
                       } /*End loop for REF*/
-                      if (objectPS["effects"][pj]["elements buffed"]) {
-                        eleString=' ('+objectPS["effects"][pj]["elements buffed"]+')';
+                      if (objectPS[conef][pj]["elements buffed"]) {
+                        eleString=' ('+objectPS[conef][pj]["elements buffed"]+')';
                         eleString=eleString.toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
                         functionSTR+=eleString;
                       }
@@ -303,19 +312,20 @@ function findPSkill(objectPS) {
                 }
               }
             /*check for missing skill effects*/
-            if (lsSkillFound < objectPS["effects"].length) {
+            if (lsSkillFound < objectPS[conef].length) {
               functionSTR+='+ Undefined effect(s)[';
-              for (n=0;n<objectPS["effects"].length;n++) {
-              	if (objectPS["effects"][n]["unknown passive id"]) {
-              	functionSTR+='(passiveid:'+objectPS["effects"][n]["unknown passive id"]+';param:'+objectPS["effects"][n]["unknown passive params"]+')';
+              for (n=0;n<objectPS[conef].length;n++) {
+              	if (objectPS[conef][n]["unknown passive id"]) {
+              	functionSTR+='(passiveid:'+objectPS[conef][n]["unknown passive id"]+';param:'+objectPS[conef][n]["unknown passive params"]+')';
               	}
-              	if (objectPS["effects"][n]["unknown proc id"]) {
-              	functionSTR+='(procid:'+objectPS["effects"][n]["unknown proc id"]+';param:'+objectPS["effects"][n]["unknown proc params"]+')';
+              	if (objectPS[conef][n]["unknown proc id"]) {
+              	functionSTR+='(procid:'+objectPS[conef][n]["unknown proc id"]+';param:'+objectPS[conef][n]["unknown proc params"]+')';
               	}
               }
               functionSTR+=']';
             }
-          } 
+          }
+			}
               /*End of LS Effects Loop*/
 		  if (functionSTR) return functionSTR;
 }

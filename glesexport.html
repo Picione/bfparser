@@ -27,14 +27,14 @@
 <!-- START JSON Code-->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script src="file:///C:/Users/Daniel%20W.%20Nguyen/OneDrive/lsParse.js"></script>
-<script src="file:///C:/Users/Daniel%20W.%20Nguyen/OneDrive/skillParse.js"></script>
-<script src="file:///C:/Users/Daniel%20W.%20Nguyen/OneDrive/buffParse.js"></script>
-<script src="file:///C:/Users/Daniel%20W.%20Nguyen/OneDrive/arrayParse.js"></script>
-<script src="file:///C:/Users/Daniel%20W.%20Nguyen/OneDrive/findAS.js"></script>
-<script src="file:///C:/Users/Daniel%20W.%20Nguyen/OneDrive/findPS.js"></script>
-<script src="file:///C:/Users/Daniel%20W.%20Nguyen/OneDrive/findBuff.js"></script>
-<script src="file:///C:/Users/Daniel%20W.%20Nguyen/OneDrive/knownESIT.js"></script>
+<script src="js/lsParse.js"></script>
+<script src="js/skillParse.js"></script>
+<script src="js/buffParse.js"></script>
+<script src="js/arrayParse.js"></script>
+<script src="js/findAS.js"></script>
+<script src="js/findPS.js"></script>
+<script src="js/findBuff.js"></script>
+<script src="js/knownESIT.js"></script>
 </head>
 
 <!-- MAIN BODY CONTENT -->
@@ -66,7 +66,7 @@
 <font color="#FF0004"><i>*Credit to Deathmax for Datamining</br>
 *Please note that the details are expected to change during the maintenance. Recheck at<a href="http://touchandswipe.github.io/bravefrontier/unitsguide"> BFPros Unit Guide</a> after the maintenance.​</i></font>
 <script type="text/javascript">
-var serverSelect="http://picione.github.io/bravefrontier_data/jp/es.json";
+var serverSelect="http://picione.github.io/bravefrontier_data/es.json";
 var onlyNew=false;
 $(document).on("click","#newBtn", function(e) {
   onlyNew=true;
@@ -101,12 +101,12 @@ $.getJSON( serverSelect, function( unit ) {
 			
           /*Name*/
             exportSTR+='<th>'+valObj.name+'</th>';
-		exportSTR+="<th>";
-		exportSTR+=findPSkill(valObj)+"</br>";
-		exportSTR+="</th>";
+			exportSTR+="<th>";
+			exportSTR+=findPSkill(valObj, "ES")+"</br>";
+			exportSTR+="</th>";
       /*Parsing all BB Skills*/
-		 exportSTR+='</tr>';
-          $("#rawTable").append(exportSTR+'</br></br>');
+		 	exportSTR+='</tr>';
+            $("#rawTable").append(exportSTR+'</br></br>');
         } /*End range check*/
 })
 })
