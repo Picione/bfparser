@@ -69,6 +69,6 @@ var lsParseObj=[
 		{"skillid":"hp% recover on enemy defeat low", "skillref":["!Heal ", "hp% recover on enemy defeat low", "!-", "hp% recover on enemy defeat high", "!% HP when Enemy DEFEATED"]},
 		{"skillid":"hp% recover on battle win low", "skillref":["!Heal ", "hp% recover on battle win low", "!-", "hp% recover on battle win high", "!% HP when Battle WON"]},
 		{"skillid":"battle end bc fill low", "skillref":["battle end bc fill low", "!-", "battle end bc fill high", "!% BC Fill when Battle WON"]},
-		{"skillid":"target% chance", "skillref":["target% chance", "!% Chance to be Targeted"]},
+		{"skillid":"target% chance", "skillref":["target% chance", "!% Chance to be Targeted", "@"]},
 		{"skillid":"additional actions", "skillref":["additional actions", "! Action+"]},
       ];
