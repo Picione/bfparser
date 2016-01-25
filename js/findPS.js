@@ -67,6 +67,10 @@ function findPSkill(objectPS, type) {
                           groupSTR+=" (HP < "+effectVal+"%)";
 						if (effectKey=="hp above % buff requirement")
                           groupSTR+=" (HP >= "+effectVal+"%)";
+					  	if (effectKey=="hp below % passive requirement")
+                          groupSTR+=" (HP < "+effectVal+"%)";
+					  	if (effectKey=="hp above % passive requirement")
+                          groupSTR+=" (HP >= "+effectVal+"%)";
                         if (effectKey=="gender required") {
                           genderTemp=effectVal.toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
                           groupSTR+=" ("+genderTemp+")";
