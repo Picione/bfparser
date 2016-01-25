@@ -306,7 +306,7 @@ function findPSkill(objectPS, type) {
                         eleString=eleString.toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
                         functionSTR+=eleString;
                       }
-                      else if (skillSeek!="element weakness" && genderTemp=="" && !eSkill)
+                      else if (skillSeek!="element weakness" && genderTemp=="" && !eSkill && (type != "IT"))
                         functionSTR+=' (ALL)';
                   } /*End Output String Build*/
                 }
