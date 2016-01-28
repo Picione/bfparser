@@ -2,18 +2,20 @@ function findASkill(objectAS, valObj) {
 		  var bbSkillFound=0;
 		  bbFound=false;
           var functionSTR="       ";
-		  for (i in objectAS) {
+		  /*for (i in objectAS) {
               $.each(objectAS[i], function( bbKey, bbVal ) {
                   if (bbKey=="bb atk%") {
                     functionSTR+='<b><i>'+bbVal+'% </b></i>';
                     bbFound=true;
-                  }
-				  else if (bbKey=="bb base atk%") {
+                  } else if (bbKey=="bb base atk%") {
 					functionSTR+='<b><i>'+bbVal+'%</b></i>+';
 					bbFound=true;
+				  } else if (bbKey=="fixed damage") {
+					functionSTR+='<b><i>'+bbVal+' DMG </b></i>';
+					bbFound=true;  
 				  }
               })
-          }
+          }*/
 
 		  if (!bbFound)
           functionSTR+='';

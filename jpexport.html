@@ -80,24 +80,21 @@
 <script type="text/javascript">
 var serverSelect="http://picione.github.io/bravefrontier_data/jp/info.json";
 var onlyNew=false;
-$(document).on("click","#clearBtn", function(e) {
-  onlyNew==true;
+$(document).on("click","#newBtn", function(e) {
+  onlyNew=true;
 })
 $(document).on("click","#clearBtn", function(e) {
   $('#rawText').empty();
+  onlyNew=false;
 })
 $(document).on("click","#exportBtn", function(e) {
 $.getJSON( serverSelect, function( unit ) {
     /*Process for Each Unit*/
-    if (onlyNew) {
-	var rangeID=knownUN;
-	} else {
-	var rangeID=parseInt($("#refID").val());
-	}
-	$.each( unit, function( unitKey, valObj ) {
+    	var rangeID=parseInt($("#refID").val());
+		$.each( unit, function( unitKey, valObj ) {
         var exportSTR='';
         if (onlyNew) {
-		if ((valObj.guide_id >= rangeID) && (valObj.rarity >= 6)) {
+		if ((valObj.guide_id >= knownUN) && (valObj.rarity >= 6)) {
             var idFound=true;
         } else {
             var idFound=false;
@@ -138,15 +135,15 @@ $.getJSON( serverSelect, function( unit ) {
               exportSTR+=valObj.rarity+'*</br>';
      		exportSTR+='</center>';
      	  /*imp data*/
-          /*if (valObj.stats && valObj.imp) {
-		    exportSTR+='<b>Stats(Lord)+Imps</b></br><ul>'
-            exportSTR+='<li><i>HP : </i>'+valObj.stats._lord.hp+'+'+valObj.imp["max hp"]+'</br></li>';
-            exportSTR+='<li><i>ATK: </i>'+valObj.stats._lord.atk+'+'+valObj.imp["max atk"]+'</br></li>';
-            exportSTR+='<li><i>DEF: </i>'+valObj.stats._lord.def+'+'+valObj.imp["max def"]+'</br></li>';
-            exportSTR+='<li><i>REC: </i>'+valObj.stats._lord.rec+'+'+valObj.imp["max rec"]+'</br></li></ul>';
+          if (valObj.stats && valObj.imp) {
+		    exportSTR+='<b>Stats(Lord)+Imps </b>'
+            exportSTR+=valObj.stats._lord.hp+'+'+valObj.imp["max hp"]+'/';
+            exportSTR+=valObj.stats._lord.atk+'+'+valObj.imp["max atk"]+'/';
+            exportSTR+=valObj.stats._lord.def+'+'+valObj.imp["max def"]+'/';
+            exportSTR+=valObj.stats._lord.rec+'+'+valObj.imp["max rec"]+'/</br>';
           } else {
-          exportSTR+='</br>';
-          }*/
+          exportSTR+='';
+          }
           
         /*normal hits*/
         if (valObj.hits)
@@ -161,10 +158,14 @@ $.getJSON( serverSelect, function( unit ) {
         if (valObj["leader skill"]){
 		exportSTR+="<b>LS</b></br> ";
 		exportSTR+=findPSkill(valObj["leader skill"], "LS")+"</br>";
-		 }
+		if (findPSkill(valObj["leader skill"], "LS").indexOf(indexTXT) != -1)
+		 	exportSTR+=valObj["leader skill"]["desc"]+"</br>";
+		}
 		 if (valObj["extra skill"]){
 	    exportSTR+="<b>ES</b></br> ";
 		exportSTR+=findPSkill(valObj["extra skill"], "ES")+"</br>";
+		if (findPSkill(valObj["extra skill"], "ES").indexOf(indexTXT) != -1)
+		 	exportSTR+=valObj["extra skill"]["desc"]+"</br>";
 		 }
        /*Parsing all BB Skills*/
           for (ibb in bbArray) {
@@ -188,8 +189,11 @@ $.getJSON( serverSelect, function( unit ) {
 	        exportSTR+='DCS </br>';
         }
         if (valObj[bbArray[ibb]])
-            if (valObj[bbArray[ibb]].levels[9]["effects"]) 
+            if (valObj[bbArray[ibb]].levels[9]["effects"]) {
 			exportSTR+=findASkill(valObj[bbArray[ibb]].levels[9]["effects"], valObj)+'</br>';
+			if (findASkill(valObj[bbArray[ibb]].levels[9]["effects"], valObj).indexOf(indexTXT) != -1)
+				exportSTR+=findASkill(valObj[bbArray[ibb]]["desc"], valObj)+'</br>';
+			}
 			/*BB Types Loop*/
 		  }
 		  

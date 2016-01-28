@@ -26,9 +26,12 @@
 	/* AI Array */
 	var AIRef=["chance%", "!% ", "@", "! [c: ", "#", "! ", "%","!]"];
 	var AIact=[{"aiid":"skill", "suffix":"Skill"}, {"aiid":"attack", "suffix":"Attack"}];
-	var AItarcon=[{"aiid":"random", "suffix":"Random"}, {"aiid":"hp_50pr_above", "suffix":">50% HP"}, {"aiid":"hp_50pr_under", "suffix":"<50% HP"}, {"aiid":"hp_max", "suffix":"Highest HP"}, {"aiid":"hp_min", "suffix":"Lowest HP"}, {"aiid":"atk_max", "suffix":"Highest ATK"}, {"aiid":"atk_min", "suffix":"Lowest ATK"}, {"aiid":"hp_25pr_above", "suffix":">25% HP"}, {"aiid":"hp_25pr_under", "suffix":"<25% HP"}, {"aiid":"hp_75pr_above", "suffix":">75% HP"}, {"aiid":"hp_75pr_under", "suffix":"<75% HP"}];
+	var AItarcon=[{"aiid":"random", "suffix":"Random"}, {"aiid":"hp_50pr_over", "suffix":">50% HP"}, {"aiid":"hp_50pr_under", "suffix":"<50% HP"}, {"aiid":"hp_max", "suffix":"Highest HP"}, {"aiid":"hp_min", "suffix":"Lowest HP"}, {"aiid":"atk_max", "suffix":"Highest ATK"}, {"aiid":"atk_min", "suffix":"Lowest ATK"}, {"aiid":"hp_25pr_over", "suffix":">25% HP"}, {"aiid":"hp_25pr_under", "suffix":"<25% HP"}, {"aiid":"hp_75pr_over", "suffix":">75% HP"}, {"aiid":"hp_75pr_under", "suffix":"<75% HP"}];
 	var AItartyp=[{"aiid":"party", "suffix":"-P-"}, {"aiid":"enemy", "suffix":"-E-"}];
 	var AIConnect=' > ';
+	
+	/*New Buff*/
+	var indexTXT="Undefined effect(s)[";
 	
 	
     

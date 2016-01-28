@@ -1,8 +1,9 @@
     var skillParseObj=[
-        {"skillid":"bb atk%", "skillref":["?element", "! ","target area"]},
-		{"skillid":"bb added atk% based on hp", "skillref":["!", "bb added atk% based on hp", "!% (based on ", "bb added atk% proportional to hp", "! HP) ", "?element", "! ","target area"]},
-		{"skillid":"bb max atk% based on ally bb gauge and clear bb gauges", "skillref":["! (", "bb max atk% based on ally bb gauge and clear bb gauges", "!% MAX based on ALLIES BB gauge) ", "?element", "! ","target area"]},
-		{"skillid":"bb atk% inc per use", "skillref":["!", "bb atk% inc per use", "!%x", "bb atk% max number of inc", "! (max number of consecutive uses) ", "?element", "! ","target area"]},
+        {"skillid":"bb atk%", "skillref":["bb atk%", "!% ", "?element", "! ","target area"]},
+		{"skillid":"fixed damage", "skillref":["fixed damage", "!DMG ", "?element", "! ","target area"]},
+		{"skillid":"bb added atk% based on hp", "skillref":["bb base atk%","!%+", "bb added atk% based on hp", "!% (based on ", "bb added atk% proportional to hp", "! HP) ", "?element", "! ","target area"]},
+		{"skillid":"bb max atk% based on ally bb gauge and clear bb gauges", "skillref":["bb base atk%","!%+ (", "bb max atk% based on ally bb gauge and clear bb gauges", "!% MAX based on ALLIES BB gauge) ", "?element", "! ","target area"]},
+		{"skillid":"bb atk% inc per use", "skillref":["bb base atk%","!%+", "bb atk% inc per use", "!%x", "bb atk% max number of inc", "! (max number of consecutive uses) ", "?element", "! ","target area"]},
         {"skillid":"random attack", "skillref":["!Random Hits"]},
         {"skillid":"hp drain% high", "skillref":["!Drain ", "hp drain% low", "!-", "hp drain% high", "!% HP (SELF)"]},
         /*{"skillid":"bb bc%", "skillref":["bb bc%", "!% BC+ (SELF)"]},
@@ -26,6 +27,7 @@
         {"skillid":"def% buff (4)", "skillref":["def% buff (4)", "!% DEF ", "target type", "! ", "buff turns","!Turns"]},
         {"skillid":"defense% ignore", "skillref":["!Ignore DEF ", "target type", "! ","defense% ignore turns (39)", "!Turns"]},
         {"skillid":"crit% buff (7)", "skillref":["crit% buff (7)", "!% CRIT+ ", "target type", "! ", "buff turns","!Turns"]},
+		{"skillid":"self crit% buff", "skillref":["self crit% buff", "!% CRIT+ ", "target type", "! ", "self stat buff turns","!Turns"]},
         {"skillid":"crit multiplier%", "skillref":["crit multiplier%", "!% CRIT DMG+ ", "! ", "target type", "! ", "buff turns (84)","!Turns"]},
         {"skillid":"max hp% increase", "skillref":["max hp% increase", "!% Max HP+ till Death/Battle End"]},
         {"skillid":"spark dmg% buff (40)", "skillref":["spark dmg% buff (40)", "!% Spark DMG+ ", "target type", "! ", "buff turns","!Turns"]},
@@ -60,4 +62,5 @@
 		{"skillid":"self stats buff", "skillref":["@", "target type", "! ", "self stat buff turns", "!Turns"]},	
 		{"skillid":"od fill rate% buff", "skillref":["od fill rate% buff", "!% OD Fill Rate ", "od fill rate buff turns (132)", "!Turn(s)"]},
 		{"skillid":"spark dmg inc% buff", "skillref":["spark dmg inc chance%", "!% Chance for Critial Spark (", "spark dmg inc% buff", "!% DMG+) ","spark dmg inc buff turns (131)", "!Turn(s)"]},
+		{"skillid":"guard increase mitigation%", "skillref":["!Increase ", "guard increase mitigation%", "!% DMG Reduced when Guarding ","guard increase mitigation buff turns (113)", "!Turn(s)"]},
       ];
