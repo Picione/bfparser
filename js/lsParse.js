@@ -38,6 +38,7 @@ var lsParseObj=[
         {"skillid":"dmg% reflect chance%", "skillref":["dmg% reflect chance%", "!% Chance Reflect ", "dmg% reflect low", "!-", "dmg% reflect high", "!% DMG"]},
         {"skillid":"base crit% resist", "skillref":["!Nulls CRIT"]},
         {"skillid":"crit chance base resist%", "skillref":["!Nulls CRIT"]},
+		{"skillid":"base spark dmg% resist", "skillref":["!Nulls SPARK DMG"]},
         {"skillid":"strong base element damage resist%", "skillref":["!Nulls Elemental Weakness"]},
         {"skillid":"element weakness", "skillref":["elemental weakness multiplier%", "!% Element Weakness DMG+ ","@"]},
 		{"skillid":"atk% buff when enemy has ailment", "skillref":["atk% buff when enemy has ailment", "!% ATK%+ to Ails-Infected Enemies ","@"]},

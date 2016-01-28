@@ -75,8 +75,7 @@ $.getJSON( serverSelect, function( unit ) {
     $.each( unit, function( unitKey, valObj ) {
         var exportSTR='';
 		var newBuff=false;
-		var indexTXT="+ Undefined effect(s)[";
-        if (valObj.rarity == 7) {
+        if (valObj.rarity >= 6) {
             var idFound=true;
         } else {
             var idFound=false;
@@ -93,7 +92,7 @@ $.getJSON( serverSelect, function( unit ) {
 		 }
        /*Parsing all BB Skills*/
           for (ibb in bbArray) {
-        if (valObj[bbArray[ibb]])
+			if (valObj[bbArray[ibb]])
             if (valObj[bbArray[ibb]].levels[9]["effects"]) 
 			if (findASkill(valObj[bbArray[ibb]].levels[9]["effects"], valObj).indexOf(indexTXT) != -1)
 				newBuff=true; /*BB Types Loop*/
@@ -112,7 +111,7 @@ $.getJSON( serverSelect, function( unit ) {
           if (valObj.name)
               exportSTR+='Name: '+valObj.name+'</br>'
 		  }
-          $("#rawText").append(exportSTR+'</br></br>');
+          $("#rawText").append(exportSTR);
         } /*End range check*/
 })
 })
