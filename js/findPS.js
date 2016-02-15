@@ -28,6 +28,7 @@ function findPSkill(objectPS, type) {
 							for (conCount=0;conCount<objectPS[conef][pj]["conditions"][conType]["item required"].length;conCount++) {
 							    if (conCount>0) conSTR+=",";
 								conSTR+=objectPS[conef][pj]["conditions"][conType]["item required"][conCount];
+								//conSTR+=getName(objectPS[conef][pj]["conditions"][conType]["item required"][conCount],"item");//
 							}
 								conSTR+=")]";
 						}
@@ -36,6 +37,7 @@ function findPSkill(objectPS, type) {
 							for (conCount=0;conCount<objectPS[conef][pj]["conditions"][conType]["unit required"].length;conCount++) {
 							    if (conCount>0) conSTR+=",";
 								conSTR+=objectPS[conef][pj]["conditions"][conType]["unit required"][conCount];
+								//conSTR+=getName(objectPS[conef][pj]["conditions"][conType]["unit required"][conCount], "unit");//
 							}
 								conSTR+=")]";
 						}
