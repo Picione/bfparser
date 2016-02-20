@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="description" content="Brave Frontier - Extract / Export Only - A community effort by Brave Frontier PROs" />
+    <meta name="author" content="Sam GreenPuck" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Brave Frontier - Extract / Export Only - by Brave Frontier PROs</title>
+    <link rel="shortcut icon" href="https://googledrive.com/host/0B4hJr8BXxvFZZVVOZWswdnlnYTg/iconavatar128.png" />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<style type="text/css">
+    .clear {clear:both;}
+    .bd {
+        font-weight:bold;
+        background:#EEEEEE;
+        text-transform:uppercase;
+    }
+    .upper {
+        text-transform:uppercase;
+    }
+</style>
+<!-- START JSON Code-->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="js/lsParse.js"></script>
+<script src="js/skillParse.js"></script>
+<script src="js/buffParse.js"></script>
+<script src="js/arrayParse.js"></script>
+<script src="js/knownESIT.js"></script>
+<script src="js/getname.js"></script>
+<script src="js/findAS.js"></script>
+<script src="js/findAI.js"></script>
+<script src="js/findPS.js"></script>
+<script src="js/findBuff.js"></script>
+</head>
+
+<!-- MAIN BODY CONTENT -->
+<body>
+    <!-- Static navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="http://bravefrontierpros.tumblr.com/"><img src="https://googledrive.com/host/0B4hJr8BXxvFZZVVOZWswdnlnYTg/iconavatar64.png" class="img-circle" style="max-width:64px; margin-top: -7px;" width="32"/> Brave Frontier PROs</a>
+        </div>
+        		<div align="right"  style="margin-top:16px;">
+		<select onchange="location = this.options[this.selectedIndex].value;">
+			<option>Please select</option>
+			<option value="./jpexport.html">JP Units</option>
+			<option value="./jpesexport.html">JP Extra Skill List</option>
+			<option value="./jpitexport.html">JP Shere List</option>
+			<option value="./glexport.html">GL Units</option>
+			<option value="./glesexport.html">GL Extra Skill List</option>
+		</select>​
+		</div>
+      </div>
+    </div>
+
+<!-- Main Body Space-->
+<div class="container-fluid" style="margin:0px;padding:5px;">
+<div style="min-height:55px;"></div>
+
+<input type="text" id="refID" class="form-control" placeholder="refID">
+<button type="button" id="allBtn" class="btn btn-default">ALL</button>
+<button type="button" id="exportBtn" class="btn btn-default">Export</button>
+<button type="button" id="clearBtn" class="btn btn-default">Clear</button>
+
+<div id="rawText"></div>
+<font color="#FF0004"><i>*Credit to Deathmax for Datamining</br>
+*Please note that the details are expected to change during the maintenance. Recheck at<a href="http://touchandswipe.github.io/bravefrontier/unitsguide"> BFPros Unit Guide</a> after the maintenance.​</i></font>
+<script type="text/javascript">
+var serverSelect="http://picione.github.io/bravefrontier_data/jp/feskills.json";
+var allInfo=false;
+$(document).on("click","#allBtn", function(e) {
+  allInfo=true;
+})
+$(document).on("click","#clearBtn", function(e) {
+  $('#rawText').empty();
+  allInfo=false;
+})
+$(document).on("click","#exportBtn", function(e) {
+$.getJSON( serverSelect, function( unit ) {
+    /*Process for Each Unit*/
+    	var rangeID=parseInt($("#refID").val());
+		$.each( unit, function( unitKey, valObj ) {
+        var exportSTR='';
+        if (allInfo) {
+            var idFound=true;
+		} else {
+		if (unitKey == rangeID) {
+            var idFound=true;
+        } else {
+            var idFound=false;
+        }
+		}
+        /*Parsing code here*/
+        if (idFound) {
+          /*Thumb*/
+		    exportSTR+='<center>';
+            exportSTR+='<img src="http://v2.cdn.android.brave.a-lim.jp//unit/img/unit_ills_thum_'+unitKey+'.png"/></br></center>';
+          /*Title*/
+            exportSTR+='<b>Dreammaker Skills</b></br>';
+			
+		  /*Category Loop*/
+		  	var categoryArray = [];
+			var catArrayCnt = 0;
+		  	for (spi=0;spi<=100;spi++) {
+				if (valObj["category"][spi]) {
+				categoryArray[catArrayCnt]=spi;
+				catArrayCnt+=1;
+				}
+			}
+			/**/
+			for (spk=0;spk<categoryArray.length;spk++) {
+				exportSTR+='<i>Category: '+valObj["category"][categoryArray[spk]]["name"]+'</i></br>';
+				for (spj=0;spj<valObj["skills"].length;spj++) {
+					if (valObj["skills"][spj]["category"] == categoryArray[spk]) {
+					exportSTR+=valObj["skills"][spj]["skill"]["bp"]+'SP-'+findPSkill(valObj["skills"][spj]["skill"],"SP");		
+					if (valObj["skills"][spj]["dependency"] != "") {
+						var reqBP = valObj["skills"][spj]["dependency"].substr(2);
+						for (spm=0;spm<valObj["skills"].length;spm++) {
+							if (valObj["skills"][spm]["id"] == reqBP) {
+								exportSTR+=' [<i>Need ['+valObj["skills"][spm]["skill"]["bp"]+'-'+findPSkill(valObj["skills"][spm]["skill"],"SP")+'] to be unlocked</br></i>]';
+							}
+						}
+					} else exportSTR+='</br>';
+					}
+				}
+			}
+			
+	  	$("#rawText").append(exportSTR+'</br></br>');
+        } /*End range check*/
+})
+})
+})
+</script>
+
+</div> <!-- /container -->
+</body>
+</html>

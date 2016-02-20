@@ -2,8 +2,13 @@ function findPSkill(objectPS, type) {
 		  /*Parsing LS Skills*/
 		  var functionSTR="";
   		  var eSkill=false;
+		  var conES=true;
 		  if (type == "ES")
 		  		eSkill=true;
+		  if (type == "SP") {
+			  	eSkill == true;
+		  		conES == false;
+		  }
 		  var conef="effects";
 		  if (type == "IT")
 		  		conef="effect";
@@ -21,7 +26,7 @@ function findPSkill(objectPS, type) {
 					var conSTR="";
                     var effectFound=false;
                     var triggerSkill="";
-					if (eSkill) {
+					if ((eSkill) && (conES)) {
 						for (conType=0;conType<objectPS[conef][pj]["conditions"].length;conType++){
 						if (objectPS[conef][pj]["conditions"][conType]["item required"]) {
 							    conSTR+="[items(";
@@ -48,6 +53,12 @@ function findPSkill(objectPS, type) {
 					if (objectPS[conef][pj]["spark count buff activation"] || objectPS[conef][pj]["hp below % buff activation"] || objectPS[conef][pj]["damage threshold buff activation"] || objectPS[conef][pj]["damage dealt threshold buff activation"] || objectPS[conef][pj]["hc receive count buff activation"])
 						triggerSkill+='<i>'+findBuff(objectPS[conef][pj]["buff"])+'</i>';
 					/*Check collective group buff*/
+					if (skillSeek=="triggered on ubb")
+						triggerSkill+='<i>'+findTG(objectPS[conef][pj]["triggered on ubb"])+'</i>';
+					if (skillSeek=="triggered on sbb")
+						triggerSkill+='<i>'+findTG(objectPS[conef][pj]["triggered on sbb"])+'</i>';	
+                    if (skillSeek=="triggered on bb")
+						triggerSkill+='<i>'+findTG(objectPS[conef][pj]["triggered on bb"])+'</i>';	
                     if (skillSeek=="stats buff") {
                       for (ix in lsstatsBuffArray) {
                           $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
@@ -77,7 +88,7 @@ function findPSkill(objectPS, type) {
                           genderTemp=effectVal.toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
                           groupSTR+=" ("+genderTemp+")";
                         }
-						if (effectKey=="unit type buffed") {
+						if ((effectKey=="unit type buffed") && (!conES)) {
                           genderTemp=effectVal.toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
                           groupSTR+=" ("+genderTemp+")";
                         }
@@ -312,7 +323,7 @@ function findPSkill(objectPS, type) {
                         eleString=eleString.toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
                         functionSTR+=eleString;
                       }
-                      else if (skillSeek!="element weakness" && genderTemp=="" && !eSkill && (type != "IT"))
+                      else if ((skillSeek!="element weakness") && (genderTemp=="") && (type != "IT") && (type != "ES") && (type != "SP"))
                         functionSTR+=' (ALL)';
                   } /*End Output String Build*/
                 }
