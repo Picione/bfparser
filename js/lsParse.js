@@ -64,7 +64,7 @@ var lsParseObj=[
 		{"skillid":"angel idol recover counts", "skillref":["angel idol recover counts", "! Time(s) (", "angel idol recover chance% low", "!%-", "angel idol recover chance% high", "!%) Chance Withstand a KNOCKOUT ATK"]},
 		{"skillid":"spark debuff chance%", "skillref":["spark debuff chance%", "!% Chance Debuff Enemies to TAKE ", "spark debuff%", "!% DMG+ on SPARK for ", "spark debuff turns", "!Turn(s)"]},
         {"skillid":"xp gained increase%", "skillref":["xp gained increase%", "!% QUEST EXP+"]},
-		{"skillid":"damage dealt threshold activation", "skillref":["increase bb gauge", "!BC fill when DEALT ", "damage threshold activation", "! DMG"]},
+		{"skillid":"damage dealt threshold activation", "skillref":["increase bb gauge", "!BC fill when DEALT ", "damage dealt threshold activation", "! DMG"]},
 		{"skillid":"damage threshold activation", "skillref":["increase bb gauge", "!BC fill when TAKEN ", "damage threshold activation", "! DMG"]},
 		{"skillid":"hc receive count activation", "skillref":["increase bb gauge", "!BC fill when RECEIVE ", "hc receive count activation", "! HC"]},
 		{"skillid":"hp% recover on enemy defeat low", "skillref":["!Heal ", "hp% recover on enemy defeat low", "!-", "hp% recover on enemy defeat high", "!% HP when Enemy DEFEATED"]},
