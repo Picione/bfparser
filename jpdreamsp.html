@@ -35,7 +35,7 @@
 <script src="js/getname.js"></script>
 <script src="js/findAS.js"></script>
 <script src="js/findAI.js"></script>
-<script src="js/findPS.js"></script>
+<script src="js/findSP.js"></script>
 <script src="js/findBuff.js"></script>
 </head>
 
@@ -71,7 +71,7 @@
 <div style="min-height:55px;"></div>
 
 <input type="text" id="refID" class="form-control" placeholder="refID">
-<button type="button" id="newBtn" class="btn btn-default">Only New</button>
+<button type="button" id="allBtn" class="btn btn-default">ALL</button>
 <button type="button" id="exportBtn" class="btn btn-default">Export</button>
 <button type="button" id="clearBtn" class="btn btn-default">Clear</button>
 
@@ -79,14 +79,14 @@
 <font color="#FF0004"><i>*Credit to Deathmax for Datamining</br>
 *Please note that the details are expected to change during the maintenance. Recheck at<a href="http://touchandswipe.github.io/bravefrontier/unitsguide"> BFPros Unit Guide</a> after the maintenance.​</i></font>
 <script type="text/javascript">
-var serverSelect="http://picione.github.io/bravefrontier_data/jp/info.json";
-var onlyNew=false;
-$(document).on("click","#newBtn", function(e) {
-  onlyNew=true;
+var serverSelect="http://picione.github.io/bravefrontier_data/jp/feskills.json";
+var allInfo=false;
+$(document).on("click","#allBtn", function(e) {
+  allInfo=true;
 })
 $(document).on("click","#clearBtn", function(e) {
   $('#rawText').empty();
-  onlyNew=false;
+  allInfo=false;
 })
 $(document).on("click","#exportBtn", function(e) {
 $.getJSON( serverSelect, function( unit ) {
@@ -94,14 +94,10 @@ $.getJSON( serverSelect, function( unit ) {
     	var rangeID=parseInt($("#refID").val());
 		$.each( unit, function( unitKey, valObj ) {
         var exportSTR='';
-        if (onlyNew) {
-		if ((valObj.guide_id >= knownUN) && (valObj.rarity >= 6)) {
+        if (allInfo) {
             var idFound=true;
-        } else {
-            var idFound=false;
-        }
 		} else {
-		if (valObj.guide_id == rangeID) {
+		if (unitKey == rangeID) {
             var idFound=true;
         } else {
             var idFound=false;
@@ -111,96 +107,38 @@ $.getJSON( serverSelect, function( unit ) {
         if (idFound) {
           /*Thumb*/
 		    exportSTR+='<center>';
-            exportSTR+='<img src="http://v2.cdn.android.brave.a-lim.jp//unit/img/unit_ills_thum_'+unitKey+'.png"/></br>';
-          /*ID*/
-            exportSTR+='Guide ID: '+valObj.guide_id;
+            exportSTR+='<img src="http://v2.cdn.android.brave.a-lim.jp//unit/img/unit_ills_thum_'+unitKey+'.png"/></br></center>';
+          /*Title*/
+            exportSTR+='<b>Dreammaker Skills</b></br>';
 			
-          /*SystemID*/
-            exportSTR+=' (RefID: '+unitKey+')</br>';
-			
-          /*NAME*/
-          if (valObj.name)
-              exportSTR+='Name: '+valObj.name+'</br>'
-          else exportSTR+='</br>';
-          
-          /*Cost and max lvl spacing*/
-          if (valObj.cost) 
-              exportSTR+='Cost: '+valObj.cost+' - ';
-		  
-          /*SERIES spacing and Element*/
-          if (valObj.element)
-              exportSTR+=valObj.element.charAt(0).toUpperCase() + valObj.element.substr(1).toLowerCase()+' - ';
-          
-          /*Rarity*/
-          if (valObj.rarity) 
-              exportSTR+=valObj.rarity+'*</br>';
-     		exportSTR+='</center>';
-     	  /*imp data*/
-          if (valObj.stats && valObj.imp) {
-		    exportSTR+='<b>Stats(Lord)+Imps </b>'
-            exportSTR+=valObj.stats._lord.hp+'+'+valObj.imp["max hp"]+'/';
-            exportSTR+=valObj.stats._lord.atk+'+'+valObj.imp["max atk"]+'/';
-            exportSTR+=valObj.stats._lord.def+'+'+valObj.imp["max def"]+'/';
-            exportSTR+=valObj.stats._lord.rec+'+'+valObj.imp["max rec"]+'/</br>';
-          } else {
-          exportSTR+='';
-          }
-          
-        /*normal hits*/
-        if (valObj.hits)
-          exportSTR+='<b>Normal Attack </b>'+valObj.hits+'HITS ';
-        else exportSTR+='<b>Normal</b></br>';
-                 
-        /*Normal DC*/
-        if (valObj["max bc generated"])
-          exportSTR+=valObj["max bc generated"]+'DCS'+'</br>';
-        else
-          exportSTR+='';
-        if (valObj["leader skill"]){
-		exportSTR+="<b>LS</b></br> ";
-		exportSTR+=findPSkill(valObj["leader skill"], "LS")+"</br>";
-		if (findPSkill(valObj["leader skill"], "LS").indexOf(indexTXT) != -1)
-		 	exportSTR+=valObj["leader skill"]["desc"]+"</br>";
-		}
-		 if (valObj["extra skill"]){
-	    exportSTR+="<b>ES</b></br> ";
-		exportSTR+=findPSkill(valObj["extra skill"], "ES")+"</br>";
-		if (findPSkill(valObj["extra skill"], "ES").indexOf(indexTXT) != -1)
-		 	exportSTR+=valObj["extra skill"]["desc"]+"</br>";
-		 }
-       /*Parsing all BB Skills*/
-          for (ibb in bbArray) {
-          if (valObj[bbArray[ibb]]) {
-		  exportSTR+='<b>'+bbArray[ibb].toUpperCase()+'</b> ';
-  		  if (!valObj[bbArray[ibb]]["error"]) {
-		  if (valObj[bbArray[ibb]].levels[9]["bc cost"])
-            exportSTR+=valObj[bbArray[ibb]].levels[9]["bc cost"]
-          else
-            exportSTR+='0'; }
-			exportSTR+='BC ';
-		  if (valObj[bbArray[ibb]].hits)
-            exportSTR+=valObj[bbArray[ibb]].hits
-          else
-            exportSTR+='0';
-			exportSTR+='HITS ';
-		  if (valObj[bbArray[ibb]]["max bc generated"])
-            exportSTR+=valObj[bbArray[ibb]]["max bc generated"]
-          else
-            exportSTR+='0';
-	        exportSTR+='DCS </br>';
-        }
-        if (valObj[bbArray[ibb]])
-            if (valObj[bbArray[ibb]].levels[9]["effects"]) {
-			exportSTR+=findASkill(valObj[bbArray[ibb]].levels[9]["effects"], valObj)+'</br>';
-			if (findASkill(valObj[bbArray[ibb]].levels[9]["effects"], valObj).indexOf(indexTXT) != -1)
-				exportSTR+=valObj[bbArray[ibb]]["desc"]+'</br>';
+		  /*Category Loop*/
+		  	var categoryArray = [];
+			var catArrayCnt = 0;
+		  	for (spi=0;spi<=100;spi++) {
+				if (valObj["category"][spi]) {
+				categoryArray[catArrayCnt]=spi;
+				catArrayCnt+=1;
+				}
 			}
-			/*BB Types Loop*/
-		  }
-		  
-	    /* Arena Type */
-	    exportSTR+='</br>AI: '+findAI(valObj);
-		$("#rawText").append(exportSTR+'</br></br>');
+			/**/
+			for (spk=0;spk<categoryArray.length;spk++) {
+				exportSTR+='<i>Category: '+valObj["category"][categoryArray[spk]]["name"]+'</i></br>';
+				for (spj=0;spj<valObj["skills"].length;spj++) {
+					if (valObj["skills"][spj]["category"] == categoryArray[spk]) {
+					exportSTR+=valObj["skills"][spj]["skill"]["bp"]+'SP-'+findSPkill(valObj["skills"][spj]["skill"],"SP");		
+					if (valObj["skills"][spj]["dependency"] != "") {
+						var reqBP = valObj["skills"][spj]["dependency"].substr(2);
+						for (spm=0;spm<valObj["skills"].length;spm++) {
+							if (valObj["skills"][spm]["id"] == reqBP) {
+								exportSTR+=' [<i>Need ['+valObj["skills"][spm]["skill"]["bp"]+'SP-'+findSPkill(valObj["skills"][spm]["skill"],"SP")+'] to be unlocked</i>]</br>';
+							}
+						}
+					} else exportSTR+='</br>';
+					}
+				}
+			}
+			
+	  	$("#rawText").append(exportSTR+'</br></br>');
         } /*End range check*/
 })
 })

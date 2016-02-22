@@ -47,7 +47,7 @@ var lsParseObj=[
         {"skillid":"stats buff", "skillref":["@"]},
         {"skillid":"xturns buff", "skillref":["@", "first x turns", "!Turns"]},
         {"skillid":"ails", "skillref":["@"]},
-		{"skillid":"triggered effect", "skillref":["!Add [","#","!] ","@"]},
+		{"skillid":"triggered effect", "skillref":["!Add  [","#","!] ","@"]},
         {"skillid":"ails resist", "skillref":["!Null Ailments (","@","!)"]},
         {"skillid":"db resist", "skillref":["!Null Debuff (","@","!)"]},
         {"skillid":"ignore def resist chance%", "skillref":["!Null Def Ignore"]},
