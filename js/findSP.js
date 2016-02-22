@@ -1,59 +1,29 @@
-function findPSkill(objectPS, type) {
+function findSPkill(objectSP) {
 		  /*Parsing LS Skills*/
 		  var functionSTR="";
-  		  var eSkill=false;
-		  var conES=false;
-		  if (type == "ES") {
-		  		eSkill=true;
-				conES=true;
-		  }
-		  var conef="effects";
-		  if (type == "IT")
-		  		conef="effect";
           var lsSkillFound=0;
           var genderTemp="";
-          if (objectPS) {
-              if (objectPS[conef]) {
+          if (objectSP) {
+              if (objectSP["effects"]) {
               for (pi=0;pi<lsParseObj.length;pi++) {
                 var skillSeek=lsParseObj[pi]["skillid"];
                 /*looking each effect array*/
-                for (pj=0;pj<objectPS[conef].length;pj++) {
+                for (pj=0;pj<objectSP["effects"].length;pj++) 
+					if (objectSP["effects"][pj]["passive"]) {
                     /*resets var for each effect*/
-                    var lsPassiveID=objectPS[conef][pj]['passive id'];
+                    var lsPassiveID=objectSP["effects"][pj]["passive"]['passive id'];
                     var groupSTR="";
 					var conSTR="";
                     var effectFound=false;
                     var triggerSkill="";
-					if ((eSkill) && (conES)) {
-						for (conType=0;conType<objectPS[conef][pj]["conditions"].length;conType++){
-						if (objectPS[conef][pj]["conditions"][conType]["item required"]) {
-							    conSTR+="[items(";
-							for (conCount=0;conCount<objectPS[conef][pj]["conditions"][conType]["item required"].length;conCount++) {
-							    if (conCount>0) conSTR+=",";
-								conSTR+=objectPS[conef][pj]["conditions"][conType]["item required"][conCount];
-								//conSTR+=getName(objectPS[conef][pj]["conditions"][conType]["item required"][conCount],"item");//
-							}
-								conSTR+=")]";
-						}
-						if (objectPS[conef][pj]["conditions"][conType]["unit required"]) {
-							    conSTR+="[units(";
-							for (conCount=0;conCount<objectPS[conef][pj]["conditions"][conType]["unit required"].length;conCount++) {
-							    if (conCount>0) conSTR+=",";
-								conSTR+=objectPS[conef][pj]["conditions"][conType]["unit required"][conCount];
-								//conSTR+=getName(objectPS[conef][pj]["conditions"][conType]["unit required"][conCount], "unit");//
-							}
-								conSTR+=")]";
-						}
-						}
-					}
-					if (objectPS[conef][pj]["triggered effect"])
-						triggerSkill+='<i>'+findASkill(objectPS[conef][pj]["triggered effect"])+'</i>';
-					if (objectPS[conef][pj]["spark count buff activation"] || objectPS[conef][pj]["hp below % buff activation"] || objectPS[conef][pj]["damage threshold buff activation"] || objectPS[conef][pj]["damage dealt threshold buff activation"] || objectPS[conef][pj]["hc receive count buff activation"])
-						triggerSkill+='<i>'+findBuff(objectPS[conef][pj]["buff"])+'</i>';
+					if (objectSP["effects"][pj]["passive"]["triggered effect"])
+						triggerSkill+='<i>'+findASkill(objectSP["effects"][pj]["passive"]["triggered effect"])+'</i>';
+					if (objectSP["effects"][pj]["passive"]["spark count buff activation"] || objectSP["effects"][pj]["passive"]["hp below % buff activation"] || objectSP["effects"][pj]["passive"]["damage threshold buff activation"] || objectSP["effects"][pj]["passive"]["damage dealt threshold buff activation"] || objectSP["effects"][pj]["passive"]["hc receive count buff activation"])
+						triggerSkill+='<i>'+findBuff(objectSP["effects"][pj]["passive"]["buff"])+'</i>';
 					/*Check collective group buff*/
                     if (skillSeek=="stats buff") {
                       for (ix in lsstatsBuffArray) {
-                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
+                          $.each( objectSP["effects"][pj]["passive"], function( effectKey, effectVal ) {
                             if (effectKey==lsstatsBuffArray[ix]["skillid"]) {
                               groupSTR+=effectVal+lsstatsBuffArray[ix]["suffix"];
                               effectFound=true;
@@ -61,7 +31,7 @@ function findPSkill(objectPS, type) {
                           })
                       }
                       /*checks unique elements requirements*/
-                      $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
+                      $.each( objectSP["effects"][pj]["passive"], function( effectKey, effectVal ) {
                         if (effectKey=="unique elements required")
                           groupSTR+=" ("+effectVal+" elements required)";
                         if (effectKey=="bb gauge above % buff requirement")
@@ -89,7 +59,7 @@ function findPSkill(objectPS, type) {
                     /*Check collective group crystals buff*/
                     else if (skillSeek=="crystals buff") {
                       for (ix in lsCrystalsBuffArray) {
-                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
+                          $.each( objectSP["effects"][pj]["passive"], function( effectKey, effectVal ) {
                             if (effectKey==lsCrystalsBuffArray[ix]["skillid"]) {
                               groupSTR+=effectVal+lsCrystalsBuffArray[ix]["suffix"];
                               effectFound=true;
@@ -100,7 +70,7 @@ function findPSkill(objectPS, type) {
                     /*Check collective ails buff*/
                     else if (skillSeek=="ails") {
                       for (ix in lsailsArray) {
-                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
+                          $.each( objectSP["effects"][pj]["passive"], function( effectKey, effectVal ) {
                             if (effectKey==lsailsArray[ix]["skillid"]) {
                               groupSTR+=effectVal+lsailsArray[ix]["suffix"];
                               effectFound=true;
@@ -114,7 +84,7 @@ function findPSkill(objectPS, type) {
                       var resistCount=0;
 					  var resistCount2=0;
                       for (ix in lsailsResistArray) {
-                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
+                          $.each( objectSP["effects"][pj]["passive"], function( effectKey, effectVal ) {
                             if (effectKey==lsailsResistArray[ix]["skillid"]) {
 								effectFound=true;
 								if (resistCount>0)
@@ -138,7 +108,7 @@ function findPSkill(objectPS, type) {
                       var resistCount=0;
 					  var resistCount2=0;
                       for (ix in lsdbResistArray) {
-                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
+                          $.each( objectSP["effects"][pj]["passive"], function( effectKey, effectVal ) {
                             if (effectKey==lsdbResistArray[ix]["skillid"]) {
 								effectFound=true;
 								if (resistCount>0)
@@ -161,7 +131,7 @@ function findPSkill(objectPS, type) {
                     else if (skillSeek=="element mitigate") {
                       var elementCount=0;
                       for (ix in lsElementMitiArray) {
-                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
+                          $.each( objectSP["effects"][pj]["passive"], function( effectKey, effectVal ) {
                             if (effectKey==lsElementMitiArray[ix]["skillid"]) {
                                 if (elementCount>0)
                                   groupSTR+=",";
@@ -184,7 +154,7 @@ function findPSkill(objectPS, type) {
                     else if (skillSeek=="element weakness") {
                       var elementCount=0;
                       for (ix in lsWeakElementArray) {
-                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
+                          $.each( objectSP["effects"][pj]["passive"], function( effectKey, effectVal ) {
                             if (effectKey==lsWeakElementArray[ix]["skillid"]) {
                                 if (elementCount>0)
                                   groupSTR+=",";
@@ -206,7 +176,7 @@ function findPSkill(objectPS, type) {
                     /*Check collective xturns buff*/
                     else if (skillSeek=="xturns buff") {
                       for (ix in lsXTurnsArray) {
-                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
+                          $.each( objectSP["effects"][pj]["passive"], function( effectKey, effectVal ) {
                             if (effectKey==lsXTurnsArray[ix]["skillid"]) {
                               groupSTR+=effectVal+lsXTurnsArray[ix]["suffix"];
                               effectFound=true;
@@ -219,7 +189,7 @@ function findPSkill(objectPS, type) {
 					else if (skillSeek=="triggered effect") {
 					  var TriggerCount=0;
                       for (ix in esTrigger) {
-                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
+                          $.each( objectSP["effects"][pj]["passive"], function( effectKey, effectVal ) {
                              if(effectKey==esTrigger[ix]["skillid"]) {
 								if (TriggerCount>0)
                                   groupSTR+=",";
@@ -239,7 +209,7 @@ function findPSkill(objectPS, type) {
                     
                     else
                   /*looping non grouping buff*/
-                  $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
+                  $.each( objectSP["effects"][pj]["passive"], function( effectKey, effectVal ) {
                     if (effectKey==skillSeek) {
                       effectFound=true;
                     }
@@ -251,7 +221,6 @@ function findPSkill(objectPS, type) {
                       if (lsSkillFound != 0)
                         functionSTR+=skillConnect;
                       lsSkillFound+=1;
-					  if (eSkill) functionSTR+=conSTR;
                       for (k in lsParseObj[pi]["skillref"]) {
 						  if (lsParseObj[pi]["skillref"][k].charAt(0) == "@") {
                           functionSTR+=groupSTR;
@@ -268,8 +237,8 @@ function findPSkill(objectPS, type) {
                         } else {
                           /*handling identified obj value*/
                           var callObjName=lsParseObj[pi]["skillref"][k];
-                          if (objectPS[conef][pj][callObjName]) {
-                              var exportValue=objectPS[conef][pj][callObjName];
+                          if (objectSP["effects"][pj]["passive"][callObjName]) {
+                              var exportValue=objectSP["effects"][pj]["passive"][callObjName];
                               if (callObjName=="element buffed")
                                 exportValue=exportValue.toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
                               /*value replacement and formatting*/
@@ -304,32 +273,45 @@ function findPSkill(objectPS, type) {
                               }
                               functionSTR+=exportValue;
                           }
-                          else if (objectPS[conef][pj][callObjName]==0)
-                            functionSTR+=objectPS[conef][pj][callObjName];
+                          else if (objectSP["effects"][pj]["passive"][callObjName]==0)
+                            functionSTR+=objectSP["effects"][pj]["passive"][callObjName];
                           else
                             functionSTR+='Unknown';
                         }
                       } /*End loop for REF*/
-                      if (objectPS[conef][pj]["elements buffed"]) {
-                        eleString=' ('+objectPS[conef][pj]["elements buffed"]+')';
+                      if (objectSP["effects"][pj]["passive"]["elements buffed"]) {
+                        eleString=' ('+objectSP["effects"][pj]["passive"]["elements buffed"]+')';
                         eleString=eleString.toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
                         functionSTR+=eleString;
                       }
-                      else if ((skillSeek!="element weakness") && (genderTemp=="") && (type != "IT") && (type != "ES") && (type != "SP"))
-                        functionSTR+=' (ALL)';
+                      else if ((skillSeek!="element weakness") && (genderTemp==""))
+                        functionSTR+='';
                   } /*End Output String Build*/
                 }
               }
+			  for (pj=0;pj<objectSP["effects"].length;pj++)
+					for (pk=0;pk<bbAddArray.length;pk++) {
+						if (objectSP["effects"][pj][bbAddArray[pk]]) {
+	                      if (lsSkillFound != 0)
+    	                    functionSTR+=skillConnect;
+        	              lsSkillFound+=1;
+  						  functionSTR+="Upgrade unit's "+bbArray[pk].toUpperCase()+" ["+findTG(objectSP["effects"][pj][bbAddArray[pk]])+"]";
+						}
+					}
+
             /*check for missing skill effects*/
-            if (lsSkillFound < objectPS[conef].length) {
+            if (lsSkillFound < objectSP["effects"].length) {
               functionSTR+='+ Undefined effect(s)[';
-              for (n=0;n<objectPS[conef].length;n++) {
-              	if (objectPS[conef][n]["unknown passive id"]) {
-              	functionSTR+='(passiveid:'+objectPS[conef][n]["unknown passive id"]+';param:'+objectPS[conef][n]["unknown passive params"]+')';
+              for (n=0;n<objectSP["effects"].length;n++) {
+              	if (objectSP["effects"][n]["passive"]["unknown passive id"]) {
+              	functionSTR+='(passiveid:'+objectSP["effects"][n]["passive"]["unknown passive id"]+';param:'+objectSP["effects"][n]["passive"]["unknown passive params"]+')';
               	}
-              	if (objectPS[conef][n]["unknown proc id"]) {
-              	functionSTR+='(procid:'+objectPS[conef][n]["unknown proc id"]+';param:'+objectPS[conef][n]["unknown proc params"]+')';
+				for (pk=0;pk<bbAddArray.length;pk++) {
+              	if (objectSP["effects"][n][bbAddArray[pk]])
+				if (objectSP["effects"][n][bbAddArray[pk]]["unknown proc id"]) {
+              	functionSTR+='(procid:'+objectSP["effects"][n][bbAddArray[pk]]["unknown proc id"]+';param:'+objectSP["effects"][n][bbAddArray[pk]]["unknown proc params"]+')';
               	}
+				}
               }
               functionSTR+=']';
             }

@@ -35,7 +35,7 @@
 <script src="js/getname.js"></script>
 <script src="js/findAS.js"></script>
 <script src="js/findAI.js"></script>
-<script src="js/findPS.js"></script>
+<script src="js/findSP.js"></script>
 <script src="js/findBuff.js"></script>
 </head>
 
@@ -125,12 +125,12 @@ $.getJSON( serverSelect, function( unit ) {
 				exportSTR+='<i>Category: '+valObj["category"][categoryArray[spk]]["name"]+'</i></br>';
 				for (spj=0;spj<valObj["skills"].length;spj++) {
 					if (valObj["skills"][spj]["category"] == categoryArray[spk]) {
-					exportSTR+=valObj["skills"][spj]["skill"]["bp"]+'SP-'+findPSkill(valObj["skills"][spj]["skill"],"SP");		
+					exportSTR+=valObj["skills"][spj]["skill"]["bp"]+'SP-'+findSPkill(valObj["skills"][spj]["skill"],"SP");		
 					if (valObj["skills"][spj]["dependency"] != "") {
 						var reqBP = valObj["skills"][spj]["dependency"].substr(2);
 						for (spm=0;spm<valObj["skills"].length;spm++) {
 							if (valObj["skills"][spm]["id"] == reqBP) {
-								exportSTR+=' [<i>Need ['+valObj["skills"][spm]["skill"]["bp"]+'-'+findPSkill(valObj["skills"][spm]["skill"],"SP")+'] to be unlocked</br></i>]';
+								exportSTR+=' [<i>Need ['+valObj["skills"][spm]["skill"]["bp"]+'SP-'+findSPkill(valObj["skills"][spm]["skill"],"SP")+'] to be unlocked</i>]</br>';
 							}
 						}
 					} else exportSTR+='</br>';

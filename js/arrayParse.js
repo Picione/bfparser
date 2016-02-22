@@ -21,7 +21,8 @@
 	var bbElementMitiArray=[{"skillid":"mitigate fire attacks", "suffix":"Fire"}, {"skillid":"mitigate water attacks", "suffix":"Water"}, {"skillid":"mitigate earth attacks", "suffix":"Earth"}, {"skillid":"mitigate thunder attacks", "suffix":"Thunder"}, {"skillid":"mitigate light attacks", "suffix":"Light"}, {"skillid":"mitigate dark attacks", "suffix":"Dark"}];
 	var bbElementMitiArray2=[{"skillid":"mitigate fire attacks (21)", "suffix":"Fire"}, {"skillid":"mitigate water attacks (22)", "suffix":"Water"}, {"skillid":"mitigate earth attacks (23)", "suffix":"Earth"}, {"skillid":"mitigate thunder attacks (24)", "suffix":"Thunder"}, {"skillid":"mitigate light attacks (25)", "suffix":"Light"}, {"skillid":"mitigate dark attacks (26)", "suffix":"Dark"}];
     var skillConnect=' / ';
-    var bbArray=["bb","sbb","ubb"];
+    var bbArray=["bb", "sbb","ubb"];
+	var bbAddArray=["add to bb", "add to sbb", "add to ubb"];
     var lsSplit=' - ';
 	/* AI Array */
 	var AIRef=["chance%", "!% ", "@", "! [c: ", "#", "! ", "%","!]"];

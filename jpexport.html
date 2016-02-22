@@ -193,7 +193,7 @@ $.getJSON( serverSelect, function( unit ) {
             if (valObj[bbArray[ibb]].levels[9]["effects"]) {
 			exportSTR+=findASkill(valObj[bbArray[ibb]].levels[9]["effects"], valObj)+'</br>';
 			if (findASkill(valObj[bbArray[ibb]].levels[9]["effects"], valObj).indexOf(indexTXT) != -1)
-				exportSTR+=findASkill(valObj[bbArray[ibb]]["desc"], valObj)+'</br>';
+				exportSTR+=valObj[bbArray[ibb]]["desc"]+'</br>';
 			}
 			/*BB Types Loop*/
 		  }
