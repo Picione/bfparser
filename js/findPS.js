@@ -27,10 +27,13 @@ function findPSkill(objectPS, type) {
 					if ((eSkill) && (conES)) {
 						for (conType=0;conType<objectPS[conef][pj]["conditions"].length;conType++){
 						if (objectPS[conef][pj]["conditions"][conType]["item required"]) {
-							    conSTR+="[items(";
+							    conSTR+="[spheres(";
 							for (conCount=0;conCount<objectPS[conef][pj]["conditions"][conType]["item required"].length;conCount++) {
 							    if (conCount>0) conSTR+=",";
-								conSTR+=objectPS[conef][pj]["conditions"][conType]["item required"][conCount];
+								conSTR+=objectPS[conef][pj]["conditions"][conType]["item required"][conCount]+"-";
+								for (gn=0;gn<knownSP.length;gn++)
+									if (objectPS[conef][pj]["conditions"][conType]["item required"][conCount] == knownSP[gn]["id"])
+									conSTR+=knownSP[gn]["name"];
 								//conSTR+=getName(objectPS[conef][pj]["conditions"][conType]["item required"][conCount],"item");//
 							}
 								conSTR+=")]";
