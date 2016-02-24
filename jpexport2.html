@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="description" content="Brave Frontier - Extract / Export Only - A community effort by Brave Frontier PROs" />
+    <meta name="author" content="Sam GreenPuck" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Brave Frontier - Extract / Export Only - by Brave Frontier PROs</title>
+    <link rel="shortcut icon" href="https://googledrive.com/host/0B4hJr8BXxvFZZVVOZWswdnlnYTg/iconavatar128.png" />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<style type="text/css">
+    .clear {clear:both;}
+    .bd {
+        font-weight:bold;
+        background:#EEEEEE;
+        text-transform:uppercase;
+    }
+    .upper {
+        text-transform:uppercase;
+    }
+</style>
+<!-- START JSON Code-->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="js/lsParse.js"></script>
+<script src="js/skillParse.js"></script>
+<script src="js/buffParse.js"></script>
+<script src="js/arrayParse.js"></script>
+<script src="js/knownESIT.js"></script>
+<script src="js/getname.js"></script>
+<script src="js/findAS.js"></script>
+<script src="js/findAI.js"></script>
+<script src="js/findPS.js"></script>
+<script src="js/findSP.js"></script>
+<script src="js/findBuff.js"></script>
+</head>
+
+<!-- MAIN BODY CONTENT -->
+<body>
+    <!-- Static navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="http://bravefrontierpros.tumblr.com/"><img src="https://googledrive.com/host/0B4hJr8BXxvFZZVVOZWswdnlnYTg/iconavatar64.png" class="img-circle" style="max-width:64px; margin-top: -7px;" width="32"/> Brave Frontier PROs</a>
+        </div>
+        		<div align="right"  style="margin-top:16px;">
+		<select onchange="location = this.options[this.selectedIndex].value;">
+			<option>Please select</option>
+			<option value="./jpexport.html">JP Units</option>
+			<option value="./jpesexport.html">JP Extra Skill List</option>
+			<option value="./jpitexport.html">JP Shere List</option>
+			<option value="./glexport.html">GL Units</option>
+			<option value="./glesexport.html">GL Extra Skill List</option>
+		</select>​
+		</div>
+      </div>
+    </div>
+
+<!-- Main Body Space-->
+<div class="container-fluid" style="margin:0px;padding:5px;">
+<div style="min-height:55px;"></div>
+
+<input type="text" id="refID" class="form-control">
+<button type="button" id="newBtn" class="btn btn-default">Only New</button>
+<button type="button" id="exportBtn" class="btn btn-default">Export</button>
+<button type="button" id="SPBtn" class="btn btn-default">Get DM Skill</button>
+<button type="button" id="clearBtn" class="btn btn-default">Clear</button>
+
+<div id="rawText">
+<div id="result0"></div>
+</br>
+<div id="sp0"></div>
+</div>
+<font color="#FF0004"><i>*Credit to Deathmax for Datamining</br>
+*Please note that the details are expected to change during the maintenance. Recheck at<a href="http://touchandswipe.github.io/bravefrontier/unitsguide"> BFPros Unit Guide</a> after the maintenance.​</i></font>
+<script type="text/javascript">
+var serverSelect="http://picione.github.io/bravefrontier_data/jp/info.json";
+var serverSelect2="http://picione.github.io/bravefrontier_data/jp/feskills.json";
+var onlyNew=false;
+var rCount=0;
+var rArray = [];
+$(document).on("click","#newBtn", function(e) {
+  onlyNew=true;
+})
+$(document).on("click","#clearBtn", function(e) {
+  $('#rawText').empty();
+  $('#rawText').append('<div id="result'+rCount+'"></div></br><div id="sp'+rCount+'"></div>');
+  onlyNew=false;
+})
+$(document).on("click","#exportBtn", function(e) {
+$.getJSON( serverSelect, function( unit ) {
+    /*Process for Each Unit*/
+		var rangeID=parseInt($("#refID").val());
+		$.each( unit, function( unitKey, valObj ) {
+        var rID = "#result" + rCount.toString();
+		var exportSTR='';
+        if (onlyNew) {
+		if ((valObj.guide_id >= knownUN) && (valObj.rarity >= 6)) {
+            var idFound=true;
+        } else {
+            var idFound=false;
+        }
+		} else {
+		if (valObj.guide_id == rangeID) {
+            var idFound=true;
+        } else {
+            var idFound=false;
+        }
+		}
+        /*Parsing code here*/
+        if (idFound) {
+          /*Thumb*/
+		    exportSTR+='<center>';
+            exportSTR+='<img src="http://v2.cdn.android.brave.a-lim.jp//unit/img/unit_ills_thum_'+unitKey+'.png"/></br>';
+          /*ID*/
+            exportSTR+='Guide ID: '+valObj.guide_id;
+			
+          /*SystemID*/
+            exportSTR+=' (RefID: '+unitKey+')</br>';
+			
+          /*NAME*/
+          if (valObj.name)
+              exportSTR+='Name: '+valObj.name+'</br>'
+          else exportSTR+='</br>';
+          
+          /*Cost and max lvl spacing*/
+          if (valObj.cost) 
+              exportSTR+='Cost: '+valObj.cost+' - ';
+		  
+          /*SERIES spacing and Element*/
+          if (valObj.element)
+              exportSTR+=valObj.element.charAt(0).toUpperCase() + valObj.element.substr(1).toLowerCase()+' - ';
+          
+          /*Rarity*/
+          if (valObj.rarity) 
+              exportSTR+=valObj.rarity+'*</br>';
+     		exportSTR+='</center>';
+     	  /*imp data*/
+          if (valObj.stats && valObj.imp) {
+		    exportSTR+='<b>Stats(Lord)+Imps </b>'
+            exportSTR+=valObj.stats._lord.hp+'+'+valObj.imp["max hp"]+'/';
+            exportSTR+=valObj.stats._lord.atk+'+'+valObj.imp["max atk"]+'/';
+            exportSTR+=valObj.stats._lord.def+'+'+valObj.imp["max def"]+'/';
+            exportSTR+=valObj.stats._lord.rec+'+'+valObj.imp["max rec"]+'/</br>';
+          } else {
+          exportSTR+='';
+          }
+          
+        /*normal hits*/
+        if (valObj.hits)
+          exportSTR+='<b>Normal Attack </b>'+valObj.hits+'HITS ';
+        else exportSTR+='<b>Normal</b></br>';
+                 
+        /*Normal DC*/
+        if (valObj["max bc generated"])
+          exportSTR+=valObj["max bc generated"]+'DCS'+'</br>';
+        else
+          exportSTR+='';
+        if (valObj["leader skill"]){
+		exportSTR+="<b>LS</b></br> ";
+		exportSTR+=findPSkill(valObj["leader skill"], "LS")+"</br>";
+		if (findPSkill(valObj["leader skill"], "LS").indexOf(indexTXT) != -1)
+		 	exportSTR+=valObj["leader skill"]["desc"]+"</br>";
+		}
+		 if (valObj["extra skill"]){
+	    exportSTR+="<b>ES</b></br> ";
+		exportSTR+=findPSkill(valObj["extra skill"], "ES")+"</br>";
+		if (findPSkill(valObj["extra skill"], "ES").indexOf(indexTXT) != -1)
+		 	exportSTR+=valObj["extra skill"]["desc"]+"</br>";
+		 }
+       /*Parsing all BB Skills*/
+          for (ibb in bbArray) {
+          if (valObj[bbArray[ibb]]) {
+		  exportSTR+='<b>'+bbArray[ibb].toUpperCase()+'</b> ';
+  		  if (!valObj[bbArray[ibb]]["error"]) {
+		  if (valObj[bbArray[ibb]].levels[9]["bc cost"])
+            exportSTR+=valObj[bbArray[ibb]].levels[9]["bc cost"]
+          else
+            exportSTR+='0'; }
+			exportSTR+='BC ';
+		  if (valObj[bbArray[ibb]].hits)
+            exportSTR+=valObj[bbArray[ibb]].hits
+          else
+            exportSTR+='0';
+			exportSTR+='HITS ';
+		  if (valObj[bbArray[ibb]]["max bc generated"])
+            exportSTR+=valObj[bbArray[ibb]]["max bc generated"]
+          else
+            exportSTR+='0';
+	        exportSTR+='DCS </br>';
+        }
+        if (valObj[bbArray[ibb]])
+            if (valObj[bbArray[ibb]].levels[9]["effects"]) {
+			exportSTR+=findASkill(valObj[bbArray[ibb]].levels[9]["effects"], valObj)+'</br>';
+			if (findASkill(valObj[bbArray[ibb]].levels[9]["effects"], valObj).indexOf(indexTXT) != -1)
+				exportSTR+=valObj[bbArray[ibb]]["desc"]+'</br>';
+			}
+			/*BB Types Loop*/
+		  }
+		  
+	    /* Arena Type */
+	    exportSTR+='</br>AI: '+findAI(valObj);
+		$(rID).append(exportSTR+'</br>');
+		var rSP = "#sp" + rCount.toString();
+		rArray[rArray.length] = {"unitKey":unitKey, "holder":rSP};	 
+		rCount+=1;
+		$('#rawText').append('</br><div id="result'+rCount+'"></div>');
+		$('#rawText').append('</br><div id="sp'+rCount+'"></div>');
+        } /*End range check*/
+})
+})
+})
+$(document).on("click","#SPBtn", function(e) {
+$.getJSON( serverSelect2, function( unit ) {
+    /*Process for Each Unit*/
+	for (spr=0;spr<rArray.length;spr++) {
+		var sprID = rArray[spr]["unitKey"];
+		$.each( unit, function( unitKey2, valObj2 ) {
+        var export2STR='';
+		if (unitKey2 == sprID) {
+            var idFound2=true;
+        } else {
+            var idFound2=false;
+        }
+        /*Parsing code here*/
+        if (idFound2) {
+          /*Title*/
+            export2STR+='<b>Dreammaker Skills</b></br>';
+			
+		  /*Category Loop*/
+		  	var categoryArray = [];
+			var catArrayCnt = 0;
+		  	for (spi=0;spi<=100;spi++) {
+				if (valObj2["category"][spi]) {
+				categoryArray[catArrayCnt]=spi;
+				catArrayCnt+=1;
+				}
+			}
+			/**/
+			for (spk=0;spk<categoryArray.length;spk++) {
+				export2STR+='<i>Category: '+valObj2["category"][categoryArray[spk]]["name"]+'</i></br>';
+				for (spj=0;spj<valObj2["skills"].length;spj++) {
+					if (valObj2["skills"][spj]["category"] == categoryArray[spk]) {
+					export2STR+=valObj2["skills"][spj]["skill"]["bp"]+'SP-'+findSPkill(valObj2["skills"][spj]["skill"],"SP");		
+					if (valObj2["skills"][spj]["dependency"] != "") {
+						var reqBP = valObj2["skills"][spj]["dependency"].substr(2);			
+						for (spm=0;spm<valObj2["skills"].length;spm++) {
+							if (valObj2["skills"][spm]["id"] == reqBP) {
+								export2STR+=' [<i>Need ['+valObj2["skills"][spm]["skill"]["bp"]+'SP-'+findSPkill(valObj2["skills"][spm]["skill"],"SP")+'] to be unlocked</i>]</br>';
+							}
+						}
+					} else export2STR+='</br>';
+					if (findSPkill(valObj2["skills"][spj]["skill"],"SP").indexOf(indexTXT) != -1)
+					export2STR+=valObj2["skills"][spj]["skill"]["desc"]+'</br>';
+					}
+				}
+			}
+		$(rArray[spr]["holder"]).empty();
+	  	$(rArray[spr]["holder"]).append(export2STR+'</br></br>');
+        } /*End range check*/
+})
+	}
+})
+})
+</script>
+
+</div> <!-- /container -->
+</body>
+</html>
