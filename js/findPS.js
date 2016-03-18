@@ -26,6 +26,8 @@ function findPSkill(objectPS, type) {
                     var triggerSkill="";
 					if ((eSkill) && (conES)) {
 						for (conType=0;conType<objectPS[conef][pj]["conditions"].length;conType++){
+						if (objectPS[conef][pj]["conditions"][conType]["sphere category required"])
+								conSTR+="[spheretype("+objectPS[conef][pj]["conditions"][conType]["sphere category required"]+")]";
 						if (objectPS[conef][pj]["conditions"][conType]["item required"]) {
 							    conSTR+="[spheres(";
 							for (conCount=0;conCount<objectPS[conef][pj]["conditions"][conType]["item required"].length;conCount++) {
