@@ -85,17 +85,23 @@ $.getJSON( serverSelect, function( unit ) {
 		 if (valObj["leader skill"]){
 		 if (findPSkill(valObj["leader skill"], "LS").indexOf(indexTXT) != -1)
 		 	newBuff=true;
+		 if (findPSkill(valObj["leader skill"], "LS").indexOf("undefined") != -1)
+		 	newBuff=true;
 		 }
 		 if (valObj["extra skill"]){
 	     if (findPSkill(valObj["extra skill"], "ES").indexOf(indexTXT) != -1)
 		 	newBuff=true;
+		 if (findPSkill(valObj["extra skill"], "ES").indexOf("undefined") != -1)
+		 	newBuff=true;
 		 }
        /*Parsing all BB Skills*/
           for (ibb in bbArray) {
-			if (valObj[bbArray[ibb]])
-            if (valObj[bbArray[ibb]].levels[9]["effects"]) 
-			if (findASkill(valObj[bbArray[ibb]].levels[9]["effects"], valObj).indexOf(indexTXT) != -1)
+			if (valObj[bbArray[ibb]]) {
+			var effectlength = valObj[bbArray[ibb]].levels.length - 1;
+            if (valObj[bbArray[ibb]].levels[effectlength]["effects"]) 
+			if (findASkill(valObj[bbArray[ibb]].levels[effectlength]["effects"], valObj).indexOf(indexTXT) != -1)
 				newBuff=true; /*BB Types Loop*/
+			}
 		  }
 		  if (newBuff) {
           /*Thumb*/
