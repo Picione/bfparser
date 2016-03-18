@@ -32,6 +32,7 @@
 <script src="js/buffParse.js"></script>
 <script src="js/arrayParse.js"></script>
 <script src="js/knownESIT.js"></script>
+<script src="js/getname.js"></script>
 <script src="js/findAS.js"></script>
 <script src="js/findAI.js"></script>
 <script src="js/findPS.js"></script>
@@ -84,13 +85,29 @@
 <font color="#FF0004"><i>*Credit to Deathmax for Datamining</br>
 *Please note that the details are expected to change during the maintenance. Recheck at<a href="http://touchandswipe.github.io/bravefrontier/unitsguide"> BFPros Unit Guide</a> after the maintenance.​</i></font>
 <script type="text/javascript">
+var jsonDB = [ {"var":"jpunit","url":"jp/info.json"}, {"var":"jpitem","url":"jp/items.json"}, {"var":"jpitem","url":"info.json"}, {"var":"jpitem","url":"items.json"}]; 
+var orgURL = "http://picione.github.io/bravefrontier_data/";
+var jpunit = [];
+var jpunitcnt = 0;
+/*for (DBcnt=0;DBcnt<json.length;DBcnt++) {*/
+/*}*/
 var serverSelect="http://picione.github.io/bravefrontier_data/jp/info.json";
 var serverSelect2="http://picione.github.io/bravefrontier_data/jp/feskills.json";
 var onlyNew=false;
 var rCount=0;
 var rArray = [];
 $(document).on("click","#newBtn", function(e) {
-  onlyNew=true;
+  /*onlyNew=true;*/
+  $.getJSON("http://picione.github.io/bravefrontier_data/jp/items.json", function( unit ){
+	$.each(unit, function ( jpunitid, jpunitval ){
+		jpunit[jpunitcnt]={"id":jpunitid,"name":jpunitval.name};
+		jpunitcnt+=1;
+	})
+})
+alert(jpunit.length);
+  for (i=0;i<jpunit.length;i++){
+	  $('rawText').append(jpunit[i]["name"]+'</br>');
+  }
 })
 $(document).on("click","#clearBtn", function(e) {
   $('#rawText').empty();

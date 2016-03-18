@@ -34,7 +34,7 @@ function findPSkill(objectPS, type) {
 								for (gn=0;gn<knownSP.length;gn++)
 									if (objectPS[conef][pj]["conditions"][conType]["item required"][conCount] == knownSP[gn]["id"])
 									conSTR+=knownSP[gn]["name"];
-								//conSTR+=getName(objectPS[conef][pj]["conditions"][conType]["item required"][conCount],"item");//
+								//conSTR+=$(document).getName(objectPS[conef][pj]["conditions"][conType]["item required"][conCount],"item");//
 							}
 								conSTR+=")]";
 						}
@@ -51,8 +51,9 @@ function findPSkill(objectPS, type) {
 					}
 					if (objectPS[conef][pj]["triggered effect"])
 						triggerSkill+='<i>'+findASkill(objectPS[conef][pj]["triggered effect"])+'</i>';
-					if (objectPS[conef][pj]["spark count buff activation"] || objectPS[conef][pj]["hp below % buff activation"] || objectPS[conef][pj]["damage threshold buff activation"] || objectPS[conef][pj]["damage dealt threshold buff activation"] || objectPS[conef][pj]["hc receive count buff activation"])
-						triggerSkill+='<i>'+findBuff(objectPS[conef][pj]["buff"])+'</i>';
+					for (triggerCC=0;triggerCC<triggerCon.length;triggerCC++)
+						if (objectPS[conef][pj][triggerCon[triggerCC]])
+							triggerSkill+='<i>'+findBuff(objectPS[conef][pj]["buff"])+'</i>';
 					/*Check collective group buff*/
                     if (skillSeek=="stats buff") {
                       for (ix in lsstatsBuffArray) {

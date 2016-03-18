@@ -1,4 +1,4 @@
-function getName(searchID, type) {
+/*jQuery.fn.getName = function (searchID, type) {
 	if (type == "unit") {
 			var jpsv = "http://picione.github.io/bravefrontier_data/jp/info.json";
 			var glsv = "http://picione.github.io/bravefrontier_data/info.json";
@@ -14,8 +14,18 @@ function getName(searchID, type) {
 	var jpname;
 	var glname;
 	if (checkType) {
-		var nameJSON = $.getJSON(jpsv);
-		jpname = JSON.parse(nameJSON)[searchID].name;
+		$.getJSON(jpsv, function( unit ){
+				$.each( unit , function( jpKey , jpVal ){
+					if (jpKey == searchID)
+						jpname = jpVal.name;
+					})
+			})
+		$.getJSON(glsv, function( unit ){
+				$.each( unit , function( glKey , glVal ){
+					if (glKey == searchID)
+						glname = glVal.name;
+					})
+			})
 	}
 	if (jpname != "")
 		functionSTR+= jpname;
@@ -24,8 +34,5 @@ function getName(searchID, type) {
 			functionSTR+= "//";
 		functionSTR+= glname; 
 	}
-	return jpname;
-}
-		
-			
-			
+	return functionSTR;
+}*/			
