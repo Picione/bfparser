@@ -89,8 +89,28 @@ var serverSelect2="http://picione.github.io/bravefrontier_data/jp/feskills.json"
 var onlyNew=false;
 var rCount=0;
 var rArray = [];
+var maxEvol= [];
 $(document).on("click","#newBtn", function(e) {
   onlyNew=true;
+  $.getJSON( serverSelect, function( unit ) {
+		$.each( unit, function( unitKey, valObj ) {
+        if (maxEvol.length == 0){
+			maxEvol[maxEvol.length]={"cat":valObj.category,"max":valObj.rarity};
+		} else {
+		var mEcheck=false;
+		for (mE=0;mE<maxEvol.length;mE++){
+			if (maxEvol[mE]["cat"] == valObj.category){
+				mEcheck=true;
+				if (maxEvol[mE]["max"] < valObj.rarity)
+				maxEvol[mE]["max"]=valObj.rarity;
+			}
+		}
+		if (!mEcheck) {
+			maxEvol[maxEvol.length]={"cat":valObj.category,"max":valObj.rarity};
+		}
+		}
+		})
+  })
 })
 $(document).on("click","#clearBtn", function(e) {
   $('#rawText').empty();
@@ -102,11 +122,15 @@ $.getJSON( serverSelect, function( unit ) {
     /*Process for Each Unit*/
 		var rangeID=parseInt($("#refID").val());
 		$.each( unit, function( unitKey, valObj ) {
-        var rID = "#result" + rCount.toString();
+		var rID = "#result" + rCount.toString();
 		var exportSTR='';
         if (onlyNew) {
-		if ((valObj.guide_id >= knownUN) && (valObj.rarity >= 6)) {
-            var idFound=true;
+		if (valObj.guide_id >= knownUN) {
+            var idFound=false;
+			for (mEc=0;mEc<maxEvol.length;mEc++){
+				if ((valObj.category == maxEvol[mEc]["cat"]) && (valObj.rarity == maxEvol[mEc]["max"]))
+					idFound=true;
+			}
         } else {
             var idFound=false;
         }
