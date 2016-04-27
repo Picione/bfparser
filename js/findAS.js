@@ -1,4 +1,5 @@
 function findTG(objectAS, valObj) {
+		  var uparams = [];
 		  var bbSkillFound=0;
 		  bbFound=false;
           var functionSTR="       ";
@@ -68,6 +69,21 @@ function findTG(objectAS, valObj) {
                           })
                       }
                     } /*End Grouping check*/
+					/**/
+					else if (skillSeek=="unknown") {
+						console.log("Check");
+						for(n=0;n<objectAS.length;n++) {
+							if (objectAS[n]["unknown proc id"]) {
+
+								if (objectAS[n]["unknown proc id"] == "86") {
+								effectFound=true;
+								uparams = [];
+								uparams = objectAS[unp]["unknown proc param"].split(",");
+								groupSTR+='{'+uparams[2]+'% Chance to Drain ('+uparams[0]+'%-'+uparams[1]+'%) HP when ATKing for '+uparams[3]+'Turns}';
+								}
+							}
+						}
+					}
                     
                     /*Check BB Self buff*/
                     else if (skillSeek=="bbSelfBuff") {

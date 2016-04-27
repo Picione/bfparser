@@ -3,6 +3,7 @@ function findPSkill(objectPS, type) {
 		  var functionSTR="";
   		  var eSkill=false;
 		  var conES=false;
+		  var uparams=[];
 		  if (type == "ES") {
 		  		eSkill=true;
 				conES=true;
@@ -115,6 +116,41 @@ function findPSkill(objectPS, type) {
                       }
                     } /*End Grouping check*/
                     
+					/**/
+					else if (skillSeek=="unknown") {
+						if (objectPS[conef][pj]["unknown passive id"] == 102) {
+							effectFound=true;
+							uparams = [];
+							uparams = objectPS[conef][pj]["unknown passive params"].split(",");
+							groupSTR+='{Add ';
+							switch (uparams[0]) {
+								case "1":
+									groupSTR+='Fire';
+									break;
+								case "2":
+									groupSTR+='Water';
+									break;
+								case "3":
+									groupSTR+='Earth';
+									break;
+								case "4":
+									groupSTR+='Thunder';
+									break;
+								case "5":
+									groupSTR+='Light';
+									break;
+								case "6":
+									groupSTR+='Dark';
+									break;
+							}
+							groupSTR+=' to ATK}';
+						} else if (objectPS[conef][pj]["unknown passive id"] == 96) {
+							effectFound=true;
+							uparams = [];
+							uparams = objectPS[conef][pj]["unknown passive params"].split(",");
+							groupSTR+='{'+uparams[1]+'% Chance for AOE Normal ATK ('+uparams[0]+' DMG)}';
+						}
+					}
                     /*Check collective ails resist buff*/
                     else if (skillSeek=="ails resist") {
                       var resistCount=0;
