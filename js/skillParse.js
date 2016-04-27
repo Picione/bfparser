@@ -1,5 +1,6 @@
     var skillParseObj=[
-        {"skillid":"bb atk%", "skillref":["bb atk%", "!% ", "?element", "! ","target area"]},
+        {"skillid":"unknown", "skillref":["@"]},
+		{"skillid":"bb atk%", "skillref":["bb atk%", "!% ", "?element", "! ","target area"]},
 		{"skillid":"fixed damage", "skillref":["fixed damage", "!DMG ", "?element", "! ","target area"]},
 		{"skillid":"bb added atk% based on hp", "skillref":["bb base atk%","!%+", "bb added atk% based on hp", "!% (based on ", "bb added atk% proportional to hp", "! HP) ", "?element", "! ","target area"]},
 		{"skillid":"bb max atk% based on ally bb gauge and clear bb gauges", "skillref":["bb base atk%","!%+ (", "bb max atk% based on ally bb gauge and clear bb gauges", "!% MAX based on ALLIES BB gauge) ", "?element", "! ","target area"]},

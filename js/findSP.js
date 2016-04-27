@@ -302,7 +302,7 @@ function findSPkill(objectSP) {
             /*check for missing skill effects*/
             if (lsSkillFound < objectSP["effects"].length) {
               functionSTR+='+ Undefined effect(s)[';
-              for (n=0;n<objectSP["effects"].length;n++) {
+              /*for (n=0;n<objectSP["effects"].length;n++) {
               	if (objectSP["effects"][n]["passive"]["unknown passive id"]) {
               	functionSTR+='(passiveid:'+objectSP["effects"][n]["passive"]["unknown passive id"]+';param:'+objectSP["effects"][n]["passive"]["unknown passive params"]+')';
               	}
@@ -312,7 +312,7 @@ function findSPkill(objectSP) {
               	functionSTR+='(procid:'+objectSP["effects"][n][bbAddArray[pk]]["unknown proc id"]+';param:'+objectSP["effects"][n][bbAddArray[pk]]["unknown proc params"]+')';
               	}
 				}
-              }
+              }*/
               functionSTR+=']';
             }
           }

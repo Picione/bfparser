@@ -1,4 +1,5 @@
 var lsParseObj=[
+	{"skillid":"unknown", "skillref":["@"]},
         {"skillid":"fire resist%", "skillref":["fire resist%", "!% Fire Resist"]},
         {"skillid":"water resist%", "skillref":["water resist%", "!% Water Resist"]},
         {"skillid":"earth resist%", "skillref":["earth resist%", "!% Earth Resist"]},
@@ -72,4 +73,5 @@ var lsParseObj=[
 		{"skillid":"battle end bc fill low", "skillref":["battle end bc fill low", "!-", "battle end bc fill high", "!% BC Fill when Battle WON"]},
 		{"skillid":"target% chance", "skillref":["target% chance", "!% Chance to be Targeted", "@"]},
 		{"skillid":"additional actions", "skillref":["additional actions", "! Action+"]},
+{"skillid":"chance to aoe", "skillref":["chance to aoe", "!% Chance for add AOE effect to Normal ATK (","aoe atk inc%", "!% DMG+)" ]},
       ];
