@@ -94,6 +94,17 @@ function findPSkill(objectPS, type) {
                       })
                     } /*End Grouping check*/
                     /*Check collective group crystals buff*/
+                    else if (skillSeek=="increase from min to max") {
+                      for (ix in lsistatsBuffArray) {
+                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
+                            if (effectKey==lsistatsBuffArray[ix]["skillid"]) {
+                              groupSTR+=effectVal+lsistatsBuffArray[ix]["suffix"];
+                              effectFound=true;
+                            }
+                          })
+                      }
+					 } /*End Grouping check*/
+					/*Check collective group crystals buff*/
                     else if (skillSeek=="crystals buff") {
                       for (ix in lsCrystalsBuffArray) {
                           $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
@@ -116,40 +127,19 @@ function findPSkill(objectPS, type) {
                       }
                     } /*End Grouping check*/
                     
+					else if (skillSeek=="counter ails") {
+                      for (ix in lscailsArray) {
+                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
+                            if (effectKey==lscailsArray[ix]["skillid"]) {
+                              groupSTR+=effectVal+lscailsArray[ix]["suffix"];
+                              effectFound=true;
+                            }
+                          })
+                      }
+                    } /*End Grouping check*/
+					
 					/**/
 					else if (skillSeek=="unknown") {
-						if (objectPS[conef][pj]["unknown passive id"] == 102) {
-							effectFound=true;
-							uparams = [];
-							uparams = objectPS[conef][pj]["unknown passive params"].split(",");
-							groupSTR+='{Add ';
-							switch (uparams[0]) {
-								case "1":
-									groupSTR+='Fire';
-									break;
-								case "2":
-									groupSTR+='Water';
-									break;
-								case "3":
-									groupSTR+='Earth';
-									break;
-								case "4":
-									groupSTR+='Thunder';
-									break;
-								case "5":
-									groupSTR+='Light';
-									break;
-								case "6":
-									groupSTR+='Dark';
-									break;
-							}
-							groupSTR+=' to ATK}';
-						} else if (objectPS[conef][pj]["unknown passive id"] == 96) {
-							effectFound=true;
-							uparams = [];
-							uparams = objectPS[conef][pj]["unknown passive params"].split(",");
-							groupSTR+='{'+uparams[1]+'% Chance for AOE Normal ATK ('+uparams[0]+' DMG)}';
-						}
 					}
                     /*Check collective ails resist buff*/
                     else if (skillSeek=="ails resist") {
@@ -215,6 +205,27 @@ function findPSkill(objectPS, type) {
                             }
                           })
                       }
+                      if (effectFound)
+                        if (elementCount==6)
+                          groupSTR="(ALL)"
+                        else
+                          groupSTR+=")"
+                    } /*End Grouping check*/
+
+					/*Passive Elemental ATK check*/
+                    else if (skillSeek=="passive element added") {
+                      if (objectPS[conef][pj]["elements added"]) {
+						effectFound=true;
+						 var elementCount=objectPS[conef][pj]["elements added"].length;
+						for (ix=0;ix<elementCount;ix++){
+							    if (ix>0)
+                                  groupSTR+=",";
+                                if (ix==0)
+                                  groupSTR+="("
+                                groupSTR+=objectPS[conef][pj]["elements added"][ix];
+						}
+					  }
+					 
                       if (effectFound)
                         if (elementCount==6)
                           groupSTR="(ALL)"

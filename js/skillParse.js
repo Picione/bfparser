@@ -6,7 +6,7 @@
 		{"skillid":"bb max atk% based on ally bb gauge and clear bb gauges", "skillref":["bb base atk%","!%+ (", "bb max atk% based on ally bb gauge and clear bb gauges", "!% MAX based on ALLIES BB gauge) ", "?element", "! ","target area"]},
 		{"skillid":"bb atk% inc per use", "skillref":["bb base atk%","!%+", "bb atk% inc per use", "!%x", "bb atk% max number of inc", "! (max number of consecutive uses) ", "?element", "! ","target area"]},
         {"skillid":"random attack", "skillref":["!Random Hits"]},
-        {"skillid":"hp drain% high", "skillref":["!Drain ", "hp drain% low", "!-", "hp drain% high", "!% HP (SELF)"]},
+        {"skillid":"hp drain% high", "skillref":["!Drain ", "hp drain% low", "!%-", "hp drain% high", "!% HP", "target type"]},
         /*{"skillid":"bb bc%", "skillref":["bb bc%", "!% BC+ (SELF)"]},
         {"skillid":"bb hc%", "skillref":["bb hc%", "!% HC+ (SELF)"]},*/
         {"skillid":"bbSelfBuff", "skillref":["@", "! (SELF)"]},
@@ -34,6 +34,7 @@
         {"skillid":"spark dmg% buff (40)", "skillref":["spark dmg% buff (40)", "!% Spark DMG+ ", "target type", "! ", "buff turns","!Turns"]},
         {"skillid":"spark dmg received apply%", "skillref":["spark dmg received apply%", "!% Chance Enemy receives ", "spark dmg% received", "!% Spark DMG+ ", "spark dmg received debuff turns (94)", "!Turns"]},
         {"skillid":"bc fill on spark%", "skillref":["bc fill on spark%", "!% Chance to Fill (", "bc fill on spark low", "!-", "bc fill on spark high", "!) BB on Spark", "@", "bc fill on spark buff turns (111)", "!Turns"]},
+        {"skillid":"spark recover hp chance%", "skillref":["spark recover hp chance%", "!% Chance to Heal (", "spark recover hp low", "!-", "spark recover hp high", "!) on Spark ", "@", "spark recover hp buff turns (135)", "!Turns"]},
         {"skillid":"inflict atk% debuff (2)", "skillref":["!Add ","inflict atk% debuff chance% (74)", "!% Chance ", "inflict atk% debuff (2)", "!% Enemy ATK to ATK ", "target type", "! ", "buff turns","!Turns"]},
         {"skillid":"hit increase/hit", "skillref":["!Normal HitCount +", "hit increase/hit", "!00% (", "extra hits dmg%", "!% DMG) ", "target type", "! ", "hit increase buff turns (50)", "!Turns"]},
         {"skillid":"taunt turns (10000)", "skillref":["!Taunt (", "def% buff", "!% DEF+) ", "target type", "! ", "taunt turns (10000)", "!Turns"]},
