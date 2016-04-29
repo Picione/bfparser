@@ -48,6 +48,7 @@ var lsParseObj=[
         {"skillid":"stats buff", "skillref":["@"]},
         {"skillid":"xturns buff", "skillref":["@", "first x turns", "!Turns"]},
         {"skillid":"ails", "skillref":["@"]},
+		{"skillid":"counter ails", "skillref":["!Chance to Counter Inflect ","@"]},
 		{"skillid":"triggered effect", "skillref":["!Add  [","#","!] ","@"]},
         {"skillid":"ails resist", "skillref":["!Null Ailments (","@","!)"]},
         {"skillid":"db resist", "skillref":["!Null Debuff (","@","!)"]},
@@ -73,5 +74,7 @@ var lsParseObj=[
 		{"skillid":"battle end bc fill low", "skillref":["battle end bc fill low", "!-", "battle end bc fill high", "!% BC Fill when Battle WON"]},
 		{"skillid":"target% chance", "skillref":["target% chance", "!% Chance to be Targeted", "@"]},
 		{"skillid":"additional actions", "skillref":["additional actions", "! Action+"]},
-{"skillid":"chance to aoe", "skillref":["chance to aoe", "!% Chance for add AOE effect to Normal ATK (","aoe atk inc%", "!% DMG+)" ]},
+		{"skillid":"chance to aoe", "skillref":["chance to aoe", "!% Chance for add AOE effect to Normal ATK (","aoe atk inc%", "!% DMG+)" ]},
+		{"skillid":"passive element added", "skillref":["!Add Element(s) to ATK ", "@"]},
+		{"skillid":"increase from min to max", "skillref":["!Incredimentally increase up to ", "@", "! within ", "turn count", "!Turns"]},
       ];

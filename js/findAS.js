@@ -71,15 +71,29 @@ function findTG(objectAS, valObj) {
                     } /*End Grouping check*/
 					/**/
 					else if (skillSeek=="unknown") {
-						console.log("Check");
-						for(n=0;n<objectAS.length;n++) {
-							if (objectAS[n]["unknown proc id"]) {
-
-								if (objectAS[n]["unknown proc id"] == "86") {
+						for(npu=0;npu<objectAS.length;npu++) {
+							if (objectAS[npu]["unknown proc id"]) {
+								if (objectAS[npu]["unknown proc id"] == "93") {
 								effectFound=true;
 								uparams = [];
-								uparams = objectAS[unp]["unknown proc param"].split(",");
-								groupSTR+='{'+uparams[2]+'% Chance to Drain ('+uparams[0]+'%-'+uparams[1]+'%) HP when ATKing for '+uparams[3]+'Turns}';
+								uparams = objectAS[npu]["unknown proc param"].split(",");
+								groupSTR+='{';
+								if ((uparams[0]=100) && (uparams[1]=100)) {
+									groupSTR+="Null Critical (taken) DMG ";
+								} else if (uparams[0]>0) {
+									groupSTR+=uparams[0]+ "% Critical (taken) DMG- ";
+								}
+								if ((uparams[2]=100) && (uparams[3]=100)) {
+									groupSTR+="Null Elemental Weakness (taken) DMG ";
+								} else if (uparams[2]>0) {
+									groupSTR+=uparams[2]+ "% Elemental Weakness (taken) DMG- ";
+								}
+								if ((uparams[4]=100) && (uparams[5]=100)) {
+								groupSTR+="Null Spark (taken) DMG ";
+								} else if (uparams[4]>0) {
+									groupSTR+=uparams[4]+ "% Spark (taken) DMG- ";
+								}
+								groupSTR+='for '+uparams[6]+'Turns}';
 								}
 							}
 						}
