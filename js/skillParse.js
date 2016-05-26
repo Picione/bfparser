@@ -6,7 +6,7 @@
 		{"skillid":"bb max atk% based on ally bb gauge and clear bb gauges", "skillref":["bb base atk%","!%+ (", "bb max atk% based on ally bb gauge and clear bb gauges", "!% MAX based on ALLIES BB gauge) ", "?element", "! ","target area"]},
 		{"skillid":"bb atk% inc per use", "skillref":["bb base atk%","!%+", "bb atk% inc per use", "!%x", "bb atk% max number of inc", "! (max number of consecutive uses) ", "?element", "! ","target area"]},
         {"skillid":"random attack", "skillref":["!Random Hits"]},
-        {"skillid":"hp drain% high", "skillref":["!Drain ", "hp drain% low", "!%-", "hp drain% high", "!% HP", "target type"]},
+        {"skillid":"hp drain% high", "skillref":["hp drain chance%","!% Chance to drain ", "hp drain% low", "!%-", "hp drain% high", "!% HP for ", "hp drain buff turns (134)", "!Turns", "target type"]},
         /*{"skillid":"bb bc%", "skillref":["bb bc%", "!% BC+ (SELF)"]},
         {"skillid":"bb hc%", "skillref":["bb hc%", "!% HC+ (SELF)"]},*/
         {"skillid":"bbSelfBuff", "skillref":["@", "! (SELF)"]},
