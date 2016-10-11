@@ -25,7 +25,7 @@
     }
 </style>
 <!-- START JSON Code-->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="js/lsParse.js"></script>
 <script src="js/skillParse.js"></script>
@@ -35,6 +35,7 @@
 <script src="js/findAS.js"></script>
 <script src="js/findAI.js"></script>
 <script src="js/findPS.js"></script>
+<script src="js/findSP.js"></script>
 <script src="js/findBuff.js"></script>
 </head>
 
@@ -69,33 +70,67 @@
 <div class="container-fluid" style="margin:0px;padding:5px;">
 <div style="min-height:55px;"></div>
 
-<input type="text" id="refID" class="form-control" placeholder="refID">
+<input type="text" id="refID" class="form-control">
 <button type="button" id="newBtn" class="btn btn-default">Only New</button>
 <button type="button" id="exportBtn" class="btn btn-default">Export</button>
+<button type="button" id="SPBtn" class="btn btn-default">Get DM Skill</button>
 <button type="button" id="clearBtn" class="btn btn-default">Clear</button>
 
-<div id="rawText"></div>
+<div id="rawText">
+<div id="result0"></div>
+</br>
+<div id="sp0"></div>
+</div>
 <font color="#FF0004"><i>*Credit to Deathmax for Datamining</br>
 *Please note that the details are expected to change during the maintenance. Recheck at<a href="http://touchandswipe.github.io/bravefrontier/unitsguide"> BFPros Unit Guide</a> after the maintenance.​</i></font>
 <script type="text/javascript">
 var serverSelect="http://picione.github.io/bravefrontier_data/info.json";
+var serverSelect2="http://picione.github.io/bravefrontier_data/feskills.json";
 var onlyNew=false;
+var rCount=0;
+var rArray = [];
+var maxEvol= [];
 $(document).on("click","#newBtn", function(e) {
   onlyNew=true;
+  $.getJSON( serverSelect, function( unit ) {
+		$.each( unit, function( unitKey, valObj ) {
+        if (maxEvol.length == 0){
+			maxEvol[maxEvol.length]={"cat":valObj.category,"max":valObj.rarity};
+		} else {
+		var mEcheck=false;
+		for (mE=0;mE<maxEvol.length;mE++){
+			if (maxEvol[mE]["cat"] == valObj.category){
+				mEcheck=true;
+				if (maxEvol[mE]["max"] < valObj.rarity)
+				maxEvol[mE]["max"]=valObj.rarity;
+			}
+		}
+		if (!mEcheck) {
+			maxEvol[maxEvol.length]={"cat":valObj.category,"max":valObj.rarity};
+		}
+		}
+		})
+  })
 })
 $(document).on("click","#clearBtn", function(e) {
   $('#rawText').empty();
+  $('#rawText').append('<div id="result'+rCount+'"></div></br><div id="sp'+rCount+'"></div>');
   onlyNew=false;
 })
 $(document).on("click","#exportBtn", function(e) {
 $.getJSON( serverSelect, function( unit ) {
     /*Process for Each Unit*/
-    	var rangeID=parseInt($("#refID").val());
+		var rangeID=parseInt($("#refID").val());
 		$.each( unit, function( unitKey, valObj ) {
-        var exportSTR='';
+		var rID = "#result" + rCount.toString();
+		var exportSTR='';
         if (onlyNew) {
-		if ((valObj.guide_id >= knownUN) && (valObj.rarity >= 6)) {
-            var idFound=true;
+		if (valObj.guide_id >= knownUN) {
+            var idFound=false;
+			for (mEc=0;mEc<maxEvol.length;mEc++){
+				if ((valObj.category == maxEvol[mEc]["cat"]) && (valObj.rarity == maxEvol[mEc]["max"]))
+					idFound=true;
+			}
         } else {
             var idFound=false;
         }
@@ -110,7 +145,7 @@ $.getJSON( serverSelect, function( unit ) {
         if (idFound) {
           /*Thumb*/
 		    exportSTR+='<center>';
-            exportSTR+='<img src="http://v2.cdn.android.brave.a-lim.jp//unit/img/unit_ills_thum_'+unitKey+'.png"/></br>';
+            exportSTR+='<img src="http://2.cdn.bravefrontier.gumi.sg/content/unit/img/unit_ills_thum_'+unitKey+'.png"/></br>';
           /*ID*/
             exportSTR+='Guide ID: '+valObj.guide_id;
 			
@@ -146,22 +181,22 @@ $.getJSON( serverSelect, function( unit ) {
           }
           
         /*normal hits*/
-        if (valObj.hits)
-          exportSTR+='<b>Normal Attack </b>'+valObj.hits+'HITS ';
+        if (valObj["damage frames"].hits)
+          exportSTR+='<b>Normal Attack </b>'+valObj["damage frames"].hits+'HITSx';
         else exportSTR+='<b>Normal</b></br>';
                  
         /*Normal DC*/
-        if (valObj["max bc generated"])
-          exportSTR+=valObj["max bc generated"]+'DCS'+'</br>';
+        if (valObj["drop check count"])
+          exportSTR+=valObj["drop check count"]+'DCC (Total '+(valObj["damage frames"].hits*valObj["drop check count"])+' DCs)</br>';
         else
           exportSTR+='';
-        if (valObj["leader skill"]){
+        if ((valObj["leader skill"]) && (!valObj["leader skill"]["error"])){
 		exportSTR+="<b>LS</b></br> ";
 		exportSTR+=findPSkill(valObj["leader skill"], "LS")+"</br>";
 		if (findPSkill(valObj["leader skill"], "LS").indexOf(indexTXT) != -1)
 		 	exportSTR+=valObj["leader skill"]["desc"]+"</br>";
 		}
-		 if (valObj["extra skill"]){
+		 if ((valObj["extra skill"]) && (!valObj["extra skill"]["error"])){
 	    exportSTR+="<b>ES</b></br> ";
 		exportSTR+=findPSkill(valObj["extra skill"], "ES")+"</br>";
 		if (findPSkill(valObj["extra skill"], "ES").indexOf(indexTXT) != -1)
@@ -171,37 +206,124 @@ $.getJSON( serverSelect, function( unit ) {
           for (ibb in bbArray) {
           if (valObj[bbArray[ibb]]) {
 		  exportSTR+='<b>'+bbArray[ibb].toUpperCase()+'</b> ';
-  		  if (!valObj[bbArray[ibb]]["error"]) {
-		  if (valObj[bbArray[ibb]].levels[9]["bc cost"])
-            exportSTR+=valObj[bbArray[ibb]].levels[9]["bc cost"]
+		  if (!valObj[bbArray[ibb]]["error"]) {
+		  var effectlength = valObj[bbArray[ibb]]["levels"].length - 1;
+		  if (valObj[bbArray[ibb]]["levels"][effectlength]["bc cost"])
+            exportSTR+=valObj[bbArray[ibb]]["levels"][effectlength]["bc cost"];
           else
             exportSTR+='0'; }
 			exportSTR+='BC ';
-		  if (valObj[bbArray[ibb]].hits)
-            exportSTR+=valObj[bbArray[ibb]].hits
+			var DFhits = 0;
+		  if (valObj[bbArray[ibb]]["damage frames"]){
+			for (countDF=0;countDF<valObj[bbArray[ibb]]["damage frames"].length;countDF++) {
+				for (APcount=0;APcount<ATKproc.length;APcount++) {
+				if (valObj[bbArray[ibb]]["damage frames"][countDF]["proc id"] == ATKproc[APcount]) {
+						if (DFhits>0)
+							exportSTR+='+';
+						exportSTR+=valObj[bbArray[ibb]]["damage frames"][countDF].hits;
+						DFhits+=valObj[bbArray[ibb]]["damage frames"][countDF].hits;
+				}
+				}
+				switch (valObj[bbArray[ibb]]["damage frames"][countDF]["proc id"]) {
+					case "1":
+						exportSTR+='n';
+						break;
+					case "13":
+						exportSTR+='r';
+						break;
+					case "47":
+						exportSTR+='h';
+						break;
+					case "61":
+						exportSTR+='g';
+						break;
+					case "64":
+						exportSTR+='e';
+						break;
+				}
+			}
+		  }
+          if (DFhits==0)
+			exportSTR+="0";
+		  exportSTR+='HITSx';
+		  if (valObj[bbArray[ibb]]["drop check count"]){
+			  exportSTR+=valObj[bbArray[ibb]]["drop check count"];
+			  exportSTR+='DCC (Total '+(valObj[bbArray[ibb]]["drop check count"]*DFhits)+' DCs)</br>';
+		  }
           else
-            exportSTR+='0';
-			exportSTR+='HITS ';
-		  if (valObj[bbArray[ibb]]["max bc generated"])
-            exportSTR+=valObj[bbArray[ibb]]["max bc generated"]
-          else
-            exportSTR+='0';
-	        exportSTR+='DCS </br>';
+            exportSTR+='0 DCC (Total 0 DC)</br>';
         }
-        if (valObj[bbArray[ibb]])
-            if (valObj[bbArray[ibb]].levels[9]["effects"]) {
-			exportSTR+=findASkill(valObj[bbArray[ibb]].levels[9]["effects"], valObj)+'</br>';
-			if (findASkill(valObj[bbArray[ibb]].levels[9]["effects"], valObj).indexOf(indexTXT) != -1)
-				exportSTR+=findASkill(valObj[bbArray[ibb]]["desc"], valObj)+'</br>';
+        if ((valObj[bbArray[ibb]]) && (!valObj[bbArray[ibb]]["error"]))
+            if (valObj[bbArray[ibb]].levels[effectlength]["effects"]) {
+			exportSTR+=findASkill(valObj[bbArray[ibb]].levels[effectlength]["effects"], valObj)+'</br>';
+			if (findASkill(valObj[bbArray[ibb]].levels[effectlength]["effects"], valObj).indexOf(indexTXT) != -1)
+				exportSTR+=valObj[bbArray[ibb]]["desc"]+'</br>';
 			}
 			/*BB Types Loop*/
 		  }
 		  
 	    /* Arena Type */
 	    exportSTR+='</br>AI: '+findAI(valObj);
-		$("#rawText").append(exportSTR+'</br></br>');
+		$(rID).append(exportSTR+'</br>');
+		var rSP = "#sp" + rCount.toString();
+		rArray[rArray.length] = {"unitKey":unitKey, "holder":rSP};	 
+		rCount+=1;
+		$('#rawText').append('</br><div id="result'+rCount+'"></div>');
+		$('#rawText').append('</br><div id="sp'+rCount+'"></div>');
         } /*End range check*/
 })
+})
+})
+$(document).on("click","#SPBtn", function(e) {
+$.getJSON( serverSelect2, function( unit ) {
+    /*Process for Each Unit*/
+	for (spr=0;spr<rArray.length;spr++) {
+		var sprID = rArray[spr]["unitKey"];
+		$.each( unit, function( unitKey2, valObj2 ) {
+        var export2STR='';
+		if (unitKey2 == sprID) {
+            var idFound2=true;
+        } else {
+            var idFound2=false;
+        }
+        /*Parsing code here*/
+        if (idFound2) {
+          /*Title*/
+            export2STR+='<b>Dreammaker Skills</b></br>';
+			
+		  /*Category Loop*/
+		  	var categoryArray = [];
+			var catArrayCnt = 0;
+		  	for (spi=0;spi<=100;spi++) {
+				if (valObj2["category"][spi]) {
+				categoryArray[catArrayCnt]=spi;
+				catArrayCnt+=1;
+				}
+			}
+			/**/
+			for (spk=0;spk<categoryArray.length;spk++) {
+				export2STR+='<i>Category: '+valObj2["category"][categoryArray[spk]]["name"]+'</i></br>';
+				for (spj=0;spj<valObj2["skills"].length;spj++) {
+					if (valObj2["skills"][spj]["category"] == categoryArray[spk]) {
+					export2STR+=valObj2["skills"][spj]["skill"]["bp"]+'SP-'+findSPkill(valObj2["skills"][spj]["skill"],"SP");		
+					if (valObj2["skills"][spj]["dependency"] != "") {
+						var reqBP = valObj2["skills"][spj]["dependency"].substr(2);			
+						for (spm=0;spm<valObj2["skills"].length;spm++) {
+							if (valObj2["skills"][spm]["id"] == reqBP) {
+								export2STR+=' [<i>Need ['+valObj2["skills"][spm]["skill"]["bp"]+'SP-'+findSPkill(valObj2["skills"][spm]["skill"],"SP")+'] to be unlocked</i>]</br>';
+							}
+						}
+					} else export2STR+='</br>';
+					if (findSPkill(valObj2["skills"][spj]["skill"],"SP").indexOf(indexTXT) != -1)
+					export2STR+=valObj2["skills"][spj]["skill"]["desc"]+'</br>';
+					}
+				}
+			}
+		$(rArray[spr]["holder"]).empty();
+	  	$(rArray[spr]["holder"]).append(export2STR+'</br></br>');
+        } /*End range check*/
+})
+	}
 })
 })
 </script>

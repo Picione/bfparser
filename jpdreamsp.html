@@ -127,13 +127,15 @@ $.getJSON( serverSelect, function( unit ) {
 					if (valObj["skills"][spj]["category"] == categoryArray[spk]) {
 					exportSTR+=valObj["skills"][spj]["skill"]["bp"]+'SP-'+findSPkill(valObj["skills"][spj]["skill"],"SP");		
 					if (valObj["skills"][spj]["dependency"] != "") {
-						var reqBP = valObj["skills"][spj]["dependency"].substr(2);
+						var reqBP = valObj["skills"][spj]["dependency"].substr(2);			
 						for (spm=0;spm<valObj["skills"].length;spm++) {
 							if (valObj["skills"][spm]["id"] == reqBP) {
 								exportSTR+=' [<i>Need ['+valObj["skills"][spm]["skill"]["bp"]+'SP-'+findSPkill(valObj["skills"][spm]["skill"],"SP")+'] to be unlocked</i>]</br>';
 							}
 						}
 					} else exportSTR+='</br>';
+					if (findSPkill(valObj["skills"][spj]["skill"],"SP").indexOf(indexTXT) != -1)
+					exportSTR+=valObj["skills"][spj]["skill"]["desc"]+'</br>';
 					}
 				}
 			}

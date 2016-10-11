@@ -37,6 +37,6 @@
 	var indexTXT="Undefined effect(s)[";
 	
 	/*ATK proc ID*/
-	var ATKproc = [ 1, 13, 47, 61, 64];
+	var ATKproc = [ 1, 13, 47, 61, 64, 29];
 	var triggerCon = ["spark count buff activation", "hp below % buff activation", "damage threshold buff activation", "damage dealt threshold buff activation", "hc receive count buff activation"];
     

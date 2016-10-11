@@ -2,7 +2,7 @@ function findTG(objectAS, valObj) {
 		  var uparams = [];
 		  var bbSkillFound=0;
 		  bbFound=false;
-          var functionSTR="       ";
+          var functionSTR=" ";
 		  /*for (i in objectAS) {
               $.each(objectAS[i], function( bbKey, bbVal ) {
                   if (bbKey=="bb atk%") {
@@ -150,7 +150,7 @@ function findTG(objectAS, valObj) {
                     } /*End Grouping check*/
                     
                     /*Check collective counter ails buff*/
-                    else if (skillSeek=="counter ails") {
+                    else if (skillSeek=="counter inflict ailment turns") {
                       for (ix in counterailsBuffArray) {
                           $.each( objectAS, function( effectKey, effectVal ) {
                             if (effectKey==counterailsBuffArray[ix]["skillid"]) {
@@ -184,7 +184,7 @@ function findTG(objectAS, valObj) {
                                 elementCount+=1;
                                 if (elementCount==1)
                                   groupSTR+="("
-                                groupSTR+=bbElementMitiArray2[ix]["suffix"];
+                                groupSTR+=effectVal+'% '+bbElementMitiArray2[ix]["suffix"];
                                 effectFound=true;
                             }
                           })
@@ -196,7 +196,7 @@ function findTG(objectAS, valObj) {
                           groupSTR+=")"
 					}
 					
-					else if (skillSeek=="dmg% mitigation for elemental attacks") {
+					else if (skillSeek=="dmg% mitigation for elemental attacks buff turns") {
                       var elementCount=0;
                       for (ix in bbElementMitiArray) {
                           $.each( objectAS, function( effectKey, effectVal ) {
@@ -219,7 +219,7 @@ function findTG(objectAS, valObj) {
 					}
 						                      
                     /*Elemental weakness check*/
-                    else if (skillSeek=="bb element weakness") {
+                    else if (skillSeek=="elemental weakness buff turns") {
                       var elementCount=0;
                       for (ix in bbWeakElementArray) {
                           $.each( objectAS, function( effectKey, effectVal ) {
@@ -234,6 +234,8 @@ function findTG(objectAS, valObj) {
                             }
                           })
                       }
+					  if (objectAS["elemental weakness multiplier%"])
+					  	effectFound=true;
                       if (effectFound)
                         if (elementCount==6)
                           groupSTR="(ALL Elements)"
@@ -320,7 +322,7 @@ function findTG(objectAS, valObj) {
 function findASkill(objectAS, valObj) {
 		  var bbSkillFound=0;
 		  bbFound=false;
-          var functionSTR="       ";
+          var functionSTR="";
 		  /*for (i in objectAS) {
               $.each(objectAS[i], function( bbKey, bbVal ) {
                   if (bbKey=="bb atk%") {
@@ -440,7 +442,7 @@ function findASkill(objectAS, valObj) {
                     } /*End Grouping check*/
                     
                     /*Check collective counter ails buff*/
-                    else if (skillSeek=="counter ails") {
+                    else if (skillSeek=="counter inflict ailment turns") {
                       for (ix in counterailsBuffArray) {
                           $.each( objectAS[j], function( effectKey, effectVal ) {
                             if (effectKey==counterailsBuffArray[ix]["skillid"]) {
@@ -474,7 +476,7 @@ function findASkill(objectAS, valObj) {
                                 elementCount+=1;
                                 if (elementCount==1)
                                   groupSTR+="("
-                                groupSTR+=bbElementMitiArray2[ix]["suffix"];
+                                groupSTR+=effectVal+'% '+bbElementMitiArray2[ix]["suffix"];
                                 effectFound=true;
                             }
                           })
@@ -486,7 +488,7 @@ function findASkill(objectAS, valObj) {
                           groupSTR+=")"
 					}
 					
-					else if (skillSeek=="dmg% mitigation for elemental attacks") {
+					else if (skillSeek=="dmg% mitigation for elemental attacks buff turns") {
                       var elementCount=0;
                       for (ix in bbElementMitiArray) {
                           $.each( objectAS[j], function( effectKey, effectVal ) {
@@ -509,7 +511,7 @@ function findASkill(objectAS, valObj) {
 					}
 						                      
                     /*Elemental weakness check*/
-                    else if (skillSeek=="bb element weakness") {
+                    else if (skillSeek=="elemental weakness buff turns") {
                       var elementCount=0;
                       for (ix in bbWeakElementArray) {
                           $.each( objectAS[j], function( effectKey, effectVal ) {
@@ -531,6 +533,19 @@ function findASkill(objectAS, valObj) {
                           groupSTR+=")"
                     } /*End Grouping check*/
                     
+					else if (skillSeek=="bb atk%") {
+						$.each(objectAS[j], function( effectKey, effectVal ) {
+						if (effectKey == "bb atk%")
+							effectFound=true;
+						if (effectKey == "bb elements") {
+							for (bbe=0;bbe<effectVal.length;bbe++){
+								groupSTR+=" "+effectVal[bbe].toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+							}
+						}
+						})
+						
+					}
+					
                     else
                   /*looping non grouping buff*/
                   $.each( objectAS[j], function( effectKey, effectVal ) {

@@ -78,7 +78,27 @@ function findSPkill(objectSP) {
                           })
                       }
                     } /*End Grouping check*/
-                    
+                    					/*Passive Elemental ATK check*/
+                    else if (skillSeek=="passive element added") {
+                      if (objectSP["effects"][pj]["passive"]["elements added"]) {
+						effectFound=true;
+						 var elementCount=objectSP["effects"][pj]["passive"]["elements added"].length;
+						for (ix=0;ix<elementCount;ix++){
+							    if (ix>0)
+                                  groupSTR+=",";
+                                if (ix==0)
+                                  groupSTR+="("
+                                groupSTR+=objectSP["effects"][pj]["passive"]["elements added"][ix];
+						}
+					  }
+					 
+                      if (effectFound)
+                        if (elementCount==6)
+                          groupSTR="(ALL)"
+                        else
+                          groupSTR+=")"
+                    } /*End Grouping check*/
+
                     /*Check collective ails resist buff*/
                     else if (skillSeek=="ails resist") {
                       var resistCount=0;
@@ -422,6 +442,9 @@ function findSPkill(objectSP) {
                             }
                           })
                       }
+					  if (objectSP["effects"][pj]["add to passive"]["dmg% mitigation for elemental attacks"]){
+							effectFound=true;
+					  }
                       if (effectFound)
                         if (elementCount==6)
                           groupSTR="(ALL)"
