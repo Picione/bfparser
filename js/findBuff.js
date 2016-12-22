@@ -88,17 +88,28 @@ function findBuff(objectPS) {
                   } /*End Output String Build*/
                 }
             /*check for missing skill effects*/
-            if (BuffFound < objectPS.length) {
-              buffSTR+='+ Undefined effect(s)[';
-              for (n=0;n<objectPS["effects"].length;n++) {
-              	if (objectPS["effects"][n]["unknown passive id"]) {
-              	buffSTR+='(passiveid:'+objectPS["effects"][n]["unknown passive id"]+';param:'+objectPS["effects"][n]["unknown passive params"]+')';
+            if (!BuffFound) {
+				var uparams = [];
+				var eTurn = 0;
+              	if (objectPS["unknown buff id"]) {
+              		if(objectPS["unknown buff id"] == 132) {
+						uparams = [];
+						uparams = objectPS["unknown buff params"].split("&");
+						eTurn = parseInt(objectPS["buff turns (132)"]);
+						buffSTR+=' {'+uparams[0]+'% OD Fill Rates (SELF) for '+uparams[1]+'Turns} for '+eTurn+' Turns';
+					} else if(objectPS["unknown buff id"] == 74) {
+						uparams = [];
+						uparams = objectPS["unknown buff params"].split("&");
+						eTurn = parseInt(objectPS["buff turns (74)"]);
+						buffSTR+=' {'+uparams[1]+'% Chance '+uparams[0]+'% Enemies ATK for '+uparams[2]+'Turns (SELF)}  for '+eTurn+' Turns';
+					} else if(objectPS["unknown buff id"] == 75) {
+						uparams = [];
+						uparams = objectPS["unknown buff params"].split("&");
+						eTurn = parseInt(objectPS["buff turns (75)"]);
+						buffSTR+=' {'+uparams[1]+'% Chance '+uparams[0]+'% Enemies DEF for '+uparams[2]+'Turns (SELF)}  for '+eTurn+' Turns';
+					} else
+				buffSTR+='+ Undefined effect(s)[(buffid:'+objectPS["unknown buff id"]+';param:'+objectPS["unknown buff params"]+')]';
               	}
-              	if (objectPS["effects"][n]["unknown proc id"]) {
-              	buffSTR+='(procid:'+objectPS["effects"][n]["unknown proc id"]+';param:'+objectPS["effects"][n]["unknown proc params"]+')';
-              	}
-              }
-              buffSTR+=']';
             }
           } 
               /*End of LS Effects Loop*/

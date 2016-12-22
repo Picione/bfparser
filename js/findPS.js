@@ -1,5 +1,6 @@
 function findPSkill(objectPS, type) {
 		  /*Parsing LS Skills*/
+		  var uparams = [];
 		  var functionSTR="";
   		  var eSkill=false;
 		  var conES=false;
@@ -375,16 +376,55 @@ function findPSkill(objectPS, type) {
               }
             /*check for missing skill effects*/
             if (lsSkillFound < objectPS[conef].length) {
-              functionSTR+='+ Undefined effect(s)[';
               for (n=0;n<objectPS[conef].length;n++) {
-              	if (objectPS[conef][n]["unknown passive id"]) {
-              	functionSTR+='(passiveid:'+objectPS[conef][n]["unknown passive id"]+';param:'+objectPS[conef][n]["unknown passive params"]+')';
+              if (objectPS[conef][n]["unknown passive id"]){	
+				if (objectPS[conef][n]["unknown passive id"] == 100) {
+						uparams = [];
+						uparams = objectPS[conef][n]["unknown passive params"].split(",");
+						functionSTR+=' {'+uparams[0]+'% Chance for Critial Spark ('+uparams[1]+'% DMG+)} ';
+				}
+				else if (objectPS[conef][n]["unknown passive id"] == 106) {
+						uparams = [];
+						uparams = objectPS[conef][n]["unknown passive params"].split(",");
+						functionSTR+=' {After OverDrive, '+uparams[2]+' Time(s) '+uparams[1]+'% Chance Withstand a KNOCKOUT ATK (Heal '+uparams[3]+'% HP)} ';
+				}
+				else if (objectPS[conef][n]["unknown passive id"] == 112) {
+						uparams = [];
+						uparams = objectPS[conef][n]["unknown passive params"].split(",");
+						functionSTR+=' {'+uparams[0]+'%ABP+ '+uparams[1]+'%CBP+} ';
+				}
+				else if (objectPS[conef][n]["unknown passive id"] == 111) {
+						uparams = [];
+						uparams = objectPS[conef][n]["unknown passive params"].split(",");
+						functionSTR+=' {'+uparams[0]+'%Chance+ to BB/SBB in Arena/Coliseum} ';
+				}
+				else if (objectPS[conef][n]["unknown passive id"] == 110) {
+						uparams = [];
+						uparams = objectPS[conef][n]["unknown passive params"].split(",");
+						functionSTR+=' {'+uparams[4]+'% Chance to Drain '+uparams[2]+'%/'+uparams[3]+'% Enemy BB/SBB in Arena/Coliseum} ';
+				}
+				else if (objectPS[conef][n]["unknown passive id"] == 103) {
+						uparams = [];
+						uparams = objectPS[conef][n]["unknown passive params"].split(",");
+						functionSTR+=' {'+uparams[0]+'BB ATK%+ (HP >= '+uparams[3]+'%) } ';
+				}
+				else if (objectPS[conef][n]["unknown passive id"] == 72) {
+						uparams = [];
+						uparams = objectPS[conef][n]["unknown passive params"].split(",");
+						if (uparams[0] == 1)
+							functionSTR+="Heal Each Turn Effect ";
+						if (uparams[1] == 1){
+							if(uparams[0] == 1)
+								functionSTR+="& ";
+							functionSTR+="BB Fill Each Turn Effect "
+						}
+						functionSTR+='Incur At The Begin of Turn (Exceptions for 1st Turn in Arena and Colo)';
+				}
+				else {
+              	functionSTR+='+ Undefined effect(s)['+'(passiveid:'+objectPS[conef][n]["unknown passive id"]+';param:'+objectPS[conef][n]["unknown passive params"]+')]';
               	}
-              	if (objectPS[conef][n]["unknown proc id"]) {
-              	functionSTR+='(procid:'+objectPS[conef][n]["unknown proc id"]+';param:'+objectPS[conef][n]["unknown proc params"]+')';
-              	}
+			  }
               }
-              functionSTR+=']';
             }
           }
 			}

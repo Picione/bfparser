@@ -2,7 +2,7 @@ function findTG(objectAS, valObj) {
 		  var uparams = [];
 		  var bbSkillFound=0;
 		  bbFound=false;
-          var functionSTR="       ";
+          var functionSTR=" ";
 		  /*for (i in objectAS) {
               $.each(objectAS[i], function( bbKey, bbVal ) {
                   if (bbKey=="bb atk%") {
@@ -70,34 +70,7 @@ function findTG(objectAS, valObj) {
                       }
                     } /*End Grouping check*/
 					/**/
-					else if (skillSeek=="unknown") {
-						for(npu=0;npu<objectAS.length;npu++) {
-							if (objectAS[npu]["unknown proc id"]) {
-								if (objectAS[npu]["unknown proc id"] == "93") {
-								effectFound=true;
-								uparams = [];
-								uparams = objectAS[npu]["unknown proc param"].split(",");
-								groupSTR+='{';
-								if ((uparams[0]=100) && (uparams[1]=100)) {
-									groupSTR+="Null Critical (taken) DMG ";
-								} else if (uparams[0]>0) {
-									groupSTR+=uparams[0]+ "% Critical (taken) DMG- ";
-								}
-								if ((uparams[2]=100) && (uparams[3]=100)) {
-									groupSTR+="Null Elemental Weakness (taken) DMG ";
-								} else if (uparams[2]>0) {
-									groupSTR+=uparams[2]+ "% Elemental Weakness (taken) DMG- ";
-								}
-								if ((uparams[4]=100) && (uparams[5]=100)) {
-								groupSTR+="Null Spark (taken) DMG ";
-								} else if (uparams[4]>0) {
-									groupSTR+=uparams[4]+ "% Spark (taken) DMG- ";
-								}
-								groupSTR+='for '+uparams[6]+'Turns}';
-								}
-							}
-						}
-					}
+
                     
                     /*Check BB Self buff*/
                     else if (skillSeek=="bbSelfBuff") {
@@ -150,7 +123,7 @@ function findTG(objectAS, valObj) {
                     } /*End Grouping check*/
                     
                     /*Check collective counter ails buff*/
-                    else if (skillSeek=="counter ails") {
+                    else if (skillSeek=="counter inflict ailment turns") {
                       for (ix in counterailsBuffArray) {
                           $.each( objectAS, function( effectKey, effectVal ) {
                             if (effectKey==counterailsBuffArray[ix]["skillid"]) {
@@ -184,7 +157,7 @@ function findTG(objectAS, valObj) {
                                 elementCount+=1;
                                 if (elementCount==1)
                                   groupSTR+="("
-                                groupSTR+=bbElementMitiArray2[ix]["suffix"];
+                                groupSTR+=effectVal+'% '+bbElementMitiArray2[ix]["suffix"];
                                 effectFound=true;
                             }
                           })
@@ -196,7 +169,7 @@ function findTG(objectAS, valObj) {
                           groupSTR+=")"
 					}
 					
-					else if (skillSeek=="dmg% mitigation for elemental attacks") {
+					else if (skillSeek=="dmg% mitigation for elemental attacks buff turns") {
                       var elementCount=0;
                       for (ix in bbElementMitiArray) {
                           $.each( objectAS, function( effectKey, effectVal ) {
@@ -219,7 +192,7 @@ function findTG(objectAS, valObj) {
 					}
 						                      
                     /*Elemental weakness check*/
-                    else if (skillSeek=="bb element weakness") {
+                    else if (skillSeek=="elemental weakness buff turns") {
                       var elementCount=0;
                       for (ix in bbWeakElementArray) {
                           $.each( objectAS, function( effectKey, effectVal ) {
@@ -234,6 +207,8 @@ function findTG(objectAS, valObj) {
                             }
                           })
                       }
+					  if (objectAS["elemental weakness multiplier%"])
+					  	effectFound=true;
                       if (effectFound)
                         if (elementCount==6)
                           groupSTR="(ALL Elements)"
@@ -260,9 +235,11 @@ function findTG(objectAS, valObj) {
                           functionSTR+=groupSTR;
                         } else if (skillParseObj[i]["skillref"][k].charAt(0) == "?") {
                           /*handling special obj values*/
-                          var specialKey=skillParseObj[i]["skillref"][k].slice(1);
-                          var specialValue=valObj[specialKey];
+                          var specialKey=skillParseObj[i]["skillref"][k].slice(1); 
+						  if (valObj) {
+						  var specialValue=valObj[specialKey];
                           specialValue=specialValue.charAt(0).toUpperCase().concat(specialValue.slice(1));
+						  } else var specialValue = "";
                           /*Extra BB Elements*/
                           if (bbFound && objectAS["bb elements"]) {
                             specialValue=objectAS["bb elements"];
@@ -318,9 +295,10 @@ function findTG(objectAS, valObj) {
           }
 		  
 function findASkill(objectAS, valObj) {
+		  var uparams = [];
 		  var bbSkillFound=0;
 		  bbFound=false;
-          var functionSTR="       ";
+          var functionSTR="";
 		  /*for (i in objectAS) {
               $.each(objectAS[i], function( bbKey, bbVal ) {
                   if (bbKey=="bb atk%") {
@@ -440,7 +418,7 @@ function findASkill(objectAS, valObj) {
                     } /*End Grouping check*/
                     
                     /*Check collective counter ails buff*/
-                    else if (skillSeek=="counter ails") {
+                    else if (skillSeek=="counter inflict ailment turns") {
                       for (ix in counterailsBuffArray) {
                           $.each( objectAS[j], function( effectKey, effectVal ) {
                             if (effectKey==counterailsBuffArray[ix]["skillid"]) {
@@ -474,7 +452,7 @@ function findASkill(objectAS, valObj) {
                                 elementCount+=1;
                                 if (elementCount==1)
                                   groupSTR+="("
-                                groupSTR+=bbElementMitiArray2[ix]["suffix"];
+                                groupSTR+=effectVal+'% '+bbElementMitiArray2[ix]["suffix"];
                                 effectFound=true;
                             }
                           })
@@ -486,7 +464,7 @@ function findASkill(objectAS, valObj) {
                           groupSTR+=")"
 					}
 					
-					else if (skillSeek=="dmg% mitigation for elemental attacks") {
+					else if (skillSeek=="dmg% mitigation for elemental attacks buff turns") {
                       var elementCount=0;
                       for (ix in bbElementMitiArray) {
                           $.each( objectAS[j], function( effectKey, effectVal ) {
@@ -509,7 +487,7 @@ function findASkill(objectAS, valObj) {
 					}
 						                      
                     /*Elemental weakness check*/
-                    else if (skillSeek=="bb element weakness") {
+                    else if (skillSeek=="elemental weakness buff turns") {
                       var elementCount=0;
                       for (ix in bbWeakElementArray) {
                           $.each( objectAS[j], function( effectKey, effectVal ) {
@@ -531,6 +509,19 @@ function findASkill(objectAS, valObj) {
                           groupSTR+=")"
                     } /*End Grouping check*/
                     
+					else if (skillSeek=="bb atk%") {
+						$.each(objectAS[j], function( effectKey, effectVal ) {
+						if (effectKey == "bb atk%")
+							effectFound=true;
+						if (effectKey == "bb elements") {
+							for (bbe=0;bbe<effectVal.length;bbe++){
+								groupSTR+=" "+effectVal[bbe].toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+							}
+						}
+						})
+						
+					}
+					
                     else
                   /*looping non grouping buff*/
                   $.each( objectAS[j], function( effectKey, effectVal ) {
@@ -551,8 +542,10 @@ function findASkill(objectAS, valObj) {
                         } else if (skillParseObj[i]["skillref"][k].charAt(0) == "?") {
                           /*handling special obj values*/
                           var specialKey=skillParseObj[i]["skillref"][k].slice(1);
-                          var specialValue=valObj[specialKey];
+						  if (valObj) {
+						  var specialValue=valObj[specialKey];
                           specialValue=specialValue.charAt(0).toUpperCase().concat(specialValue.slice(1));
+						  } else var specialValue = "";
                           /*Extra BB Elements*/
                           if (bbFound && objectAS[j]["bb elements"]) {
                             specialValue=objectAS[j]["bb elements"];
@@ -606,16 +599,60 @@ function findASkill(objectAS, valObj) {
               }
             /*check for missing skill effects*/
             if (bbSkillFound < objectAS.length) {
-              functionSTR+='+ Undefined effect(s)[';
-              for (n=0;n<objectAS.length;n++) {
-              	if (objectAS[n]["unknown passive id"]) {
-              	functionSTR+='(passiveid:'+objectAS[n]["unknown passive id"]+';param:'+objectAS[n]["unknown passive params"]+')';
-              	}
-              	if (objectAS[n]["unknown proc id"]) {
-              	functionSTR+='(procid:'+objectAS[n]["unknown proc id"]+';param:'+objectAS[n]["unknown proc param"]+')';
-              	}
-              }
-              functionSTR+=']';
+				for (n=0;n<objectAS.length;n++) {
+				if (objectAS[n]["unknown proc id"]) {	
+					if (objectAS[n]["unknown proc id"] == "93") {
+								uparams = [];
+								uparams = objectAS[n]["unknown proc param"].split(",");
+								var uCount = 0;
+								functionSTR+=' {';
+								if ((uparams[0]==100) && (uparams[1]==100)) {
+									if (uCount>0)
+										functionSTR+=" / ";
+									functionSTR+="Null Critical (taken) DMG ";
+									uCount+=1;
+								} else if (uparams[0]>0) {
+									if (uCount>0)
+										functionSTR+=" / ";
+									functionSTR+=uparams[0]+ "% Critical (taken) DMG- ";
+									uCount+=1;
+								}
+								if ((uparams[2]==100) && (uparams[3]==100)) {
+									if (uCount>0)
+										functionSTR+=" / ";
+									functionSTR+="Null Elemental Weakness (taken) DMG ";
+									uCount+=1;
+								} else if (uparams[2]>0) {
+									if (uCount>0)
+										functionSTR+=" / ";
+									functionSTR+=uparams[2]+ "% Elemental Weakness (taken) DMG- ";
+									uCount+=1;
+								}
+								if ((uparams[4]==100) && (uparams[5]==100)) {
+									if (uCount>0)
+										functionSTR+=" / ";
+									functionSTR+="Null Spark (taken) DMG ";
+								} else if (uparams[4]>0) {
+									if (uCount>0)
+										functionSTR+=" / ";
+									functionSTR+=uparams[4]+ "% Spark (taken) DMG- ";
+								}
+								functionSTR+='for '+uparams[6]+'Turns} ';
+					}
+					else if (objectAS[n]["unknown proc id"] == "88") {
+								uparams = [];
+								uparams = objectAS[n]["unknown proc param"].split(",");
+								functionSTR+=' {'+uparams[0]+'% Spark DMG+ (SELF) for '+uparams[6]+'Turns} ';
+					} else if (objectAS[n]["unknown proc id"] == "94") {
+								uparams = [];
+								uparams = objectAS[n]["unknown proc param"].split(",");
+								functionSTR+=' {'+uparams[1]+'% Chance for add AOE effect to Normal ATK ('+uparams[0]+'% DMG) for '+uparams[2]+'Turns} ';
+
+					} else {
+						functionSTR+='+ Undefined effect(s)['+'(procid:'+objectAS[n]["unknown proc id"]+';param:'+objectAS[n]["unknown proc param"]+')]';
+					}
+				}
+				}
             };
 			return functionSTR;
           }

@@ -31,10 +31,12 @@
 <script src="js/skillParse.js"></script>
 <script src="js/buffParse.js"></script>
 <script src="js/arrayParse.js"></script>
-<script src="js/findAS.js"></script>
-<script src="js/findPS.js"></script>
-<script src="js/findBuff.js"></script>
 <script src="js/knownESIT.js"></script>
+<script src="js/findAS.js"></script>
+<script src="js/findAI.js"></script>
+<script src="js/findPS.js"></script>
+<script src="js/findSP.js"></script>
+<script src="js/findBuff.js"></script>
 </head>
 
 <!-- MAIN BODY CONTENT -->
@@ -58,7 +60,8 @@
 <div class="container-fluid" style="margin:0px;padding:5px;">
 <div style="min-height:55px;"></div>
 
-<button type="button" id="exportBtn" class="btn btn-default">Export</button>
+<button type="button" id="exportBtn" class="btn btn-default">Missing Units' Skills Export</button>
+<button type="button" id="spexportBtn" class="btn btn-default">Missing Units' SPs Export</button>
 <button type="button" id="clearBtn" class="btn btn-default">Clear</button>
 
 <div id="rawText"></div>
@@ -66,6 +69,7 @@
 *Please note that the details are expected to change during the maintenance. Recheck at<a href="http://touchandswipe.github.io/bravefrontier/unitsguide"> BFPros Unit Guide</a> after the maintenance.​</i></font>
 <script type="text/javascript">
 var serverSelect="http://picione.github.io/bravefrontier_data/jp/info.json";
+var serverSelect2="http://picione.github.io/bravefrontier_data/jp/feskills.json";
 $(document).on("click","#clearBtn", function(e) {
   $('#rawText').empty();
 })
@@ -119,6 +123,31 @@ $.getJSON( serverSelect, function( unit ) {
 		  }
           $("#rawText").append(exportSTR);
         } /*End range check*/
+})
+})
+})
+$(document).on("click","#spexportBtn", function(e) {
+$.getJSON( serverSelect2, function( unit ) {
+    /*Process for Each Unit*/
+    $.each( unit, function( unitKey, valObj ) {
+        var exportSTR='';
+		var newBuff=false;
+        var idFound=true;
+        /*Parsing code here*/
+        if (idFound) {
+				for (spj=0;spj<valObj["skills"].length;spj++) {
+	    			 if (findSPkill(valObj["skills"][spj]["skill"],"SP").indexOf(indexTXT) != -1)
+		 				newBuff=true;
+				}
+		}
+		if (newBuff) {
+          /*Thumb*/
+		    exportSTR+='<center>';
+            exportSTR+='<img src="http://v2.cdn.android.brave.a-lim.jp//unit/img/unit_ills_thum_'+unitKey+'.png"/></br>';			
+          /*SystemID*/
+            exportSTR+=' (RefID: '+unitKey+')</br>';
+		  }
+          $("#rawText").append(exportSTR);
 })
 })
 })
