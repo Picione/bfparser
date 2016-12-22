@@ -70,34 +70,7 @@ function findTG(objectAS, valObj) {
                       }
                     } /*End Grouping check*/
 					/**/
-					else if (skillSeek=="unknown") {
-						for(npu=0;npu<objectAS.length;npu++) {
-							if (objectAS[npu]["unknown proc id"]) {
-								if (objectAS[npu]["unknown proc id"] == "93") {
-								effectFound=true;
-								uparams = [];
-								uparams = objectAS[npu]["unknown proc param"].split(",");
-								groupSTR+='{';
-								if ((uparams[0]=100) && (uparams[1]=100)) {
-									groupSTR+="Null Critical (taken) DMG ";
-								} else if (uparams[0]>0) {
-									groupSTR+=uparams[0]+ "% Critical (taken) DMG- ";
-								}
-								if ((uparams[2]=100) && (uparams[3]=100)) {
-									groupSTR+="Null Elemental Weakness (taken) DMG ";
-								} else if (uparams[2]>0) {
-									groupSTR+=uparams[2]+ "% Elemental Weakness (taken) DMG- ";
-								}
-								if ((uparams[4]=100) && (uparams[5]=100)) {
-								groupSTR+="Null Spark (taken) DMG ";
-								} else if (uparams[4]>0) {
-									groupSTR+=uparams[4]+ "% Spark (taken) DMG- ";
-								}
-								groupSTR+='for '+uparams[6]+'Turns}';
-								}
-							}
-						}
-					}
+
                     
                     /*Check BB Self buff*/
                     else if (skillSeek=="bbSelfBuff") {
@@ -262,9 +235,11 @@ function findTG(objectAS, valObj) {
                           functionSTR+=groupSTR;
                         } else if (skillParseObj[i]["skillref"][k].charAt(0) == "?") {
                           /*handling special obj values*/
-                          var specialKey=skillParseObj[i]["skillref"][k].slice(1);
-                          var specialValue=valObj[specialKey];
+                          var specialKey=skillParseObj[i]["skillref"][k].slice(1); 
+						  if (valObj) {
+						  var specialValue=valObj[specialKey];
                           specialValue=specialValue.charAt(0).toUpperCase().concat(specialValue.slice(1));
+						  } else var specialValue = "";
                           /*Extra BB Elements*/
                           if (bbFound && objectAS["bb elements"]) {
                             specialValue=objectAS["bb elements"];
@@ -320,6 +295,7 @@ function findTG(objectAS, valObj) {
           }
 		  
 function findASkill(objectAS, valObj) {
+		  var uparams = [];
 		  var bbSkillFound=0;
 		  bbFound=false;
           var functionSTR="";
@@ -566,8 +542,10 @@ function findASkill(objectAS, valObj) {
                         } else if (skillParseObj[i]["skillref"][k].charAt(0) == "?") {
                           /*handling special obj values*/
                           var specialKey=skillParseObj[i]["skillref"][k].slice(1);
-                          var specialValue=valObj[specialKey];
+						  if (valObj) {
+						  var specialValue=valObj[specialKey];
                           specialValue=specialValue.charAt(0).toUpperCase().concat(specialValue.slice(1));
+						  } else var specialValue = "";
                           /*Extra BB Elements*/
                           if (bbFound && objectAS[j]["bb elements"]) {
                             specialValue=objectAS[j]["bb elements"];
@@ -621,16 +599,60 @@ function findASkill(objectAS, valObj) {
               }
             /*check for missing skill effects*/
             if (bbSkillFound < objectAS.length) {
-              functionSTR+='+ Undefined effect(s)[';
-              for (n=0;n<objectAS.length;n++) {
-              	if (objectAS[n]["unknown passive id"]) {
-              	functionSTR+='(passiveid:'+objectAS[n]["unknown passive id"]+';param:'+objectAS[n]["unknown passive params"]+')';
-              	}
-              	if (objectAS[n]["unknown proc id"]) {
-              	functionSTR+='(procid:'+objectAS[n]["unknown proc id"]+';param:'+objectAS[n]["unknown proc param"]+')';
-              	}
-              }
-              functionSTR+=']';
+				for (n=0;n<objectAS.length;n++) {
+				if (objectAS[n]["unknown proc id"]) {	
+					if (objectAS[n]["unknown proc id"] == "93") {
+								uparams = [];
+								uparams = objectAS[n]["unknown proc param"].split(",");
+								var uCount = 0;
+								functionSTR+=' {';
+								if ((uparams[0]==100) && (uparams[1]==100)) {
+									if (uCount>0)
+										functionSTR+=" / ";
+									functionSTR+="Null Critical (taken) DMG ";
+									uCount+=1;
+								} else if (uparams[0]>0) {
+									if (uCount>0)
+										functionSTR+=" / ";
+									functionSTR+=uparams[0]+ "% Critical (taken) DMG- ";
+									uCount+=1;
+								}
+								if ((uparams[2]==100) && (uparams[3]==100)) {
+									if (uCount>0)
+										functionSTR+=" / ";
+									functionSTR+="Null Elemental Weakness (taken) DMG ";
+									uCount+=1;
+								} else if (uparams[2]>0) {
+									if (uCount>0)
+										functionSTR+=" / ";
+									functionSTR+=uparams[2]+ "% Elemental Weakness (taken) DMG- ";
+									uCount+=1;
+								}
+								if ((uparams[4]==100) && (uparams[5]==100)) {
+									if (uCount>0)
+										functionSTR+=" / ";
+									functionSTR+="Null Spark (taken) DMG ";
+								} else if (uparams[4]>0) {
+									if (uCount>0)
+										functionSTR+=" / ";
+									functionSTR+=uparams[4]+ "% Spark (taken) DMG- ";
+								}
+								functionSTR+='for '+uparams[6]+'Turns} ';
+					}
+					else if (objectAS[n]["unknown proc id"] == "88") {
+								uparams = [];
+								uparams = objectAS[n]["unknown proc param"].split(",");
+								functionSTR+=' {'+uparams[0]+'% Spark DMG+ (SELF) for '+uparams[6]+'Turns} ';
+					} else if (objectAS[n]["unknown proc id"] == "94") {
+								uparams = [];
+								uparams = objectAS[n]["unknown proc param"].split(",");
+								functionSTR+=' {'+uparams[1]+'% Chance for add AOE effect to Normal ATK ('+uparams[0]+'% DMG) for '+uparams[2]+'Turns} ';
+
+					} else {
+						functionSTR+='+ Undefined effect(s)['+'(procid:'+objectAS[n]["unknown proc id"]+';param:'+objectAS[n]["unknown proc param"]+')]';
+					}
+				}
+				}
             };
 			return functionSTR;
           }

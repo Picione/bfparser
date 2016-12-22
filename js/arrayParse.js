@@ -1,5 +1,5 @@
     var debuffArray=[{"skillid":"buff #1"}, {"skillid":"buff #2"}];
-    var selfstatsBuffArray=[{"skillid":"self atk% buff", "suffix":"% ATK+ "}, {"skillid":"self def% buff", "suffix":"% DEF+ "}, {"skillid":"self rec% buff", "suffix":"% REC+ "}];
+    var selfstatsBuffArray=[{"skillid":"self atk% buff", "suffix":"% ATK+ "}, {"skillid":"self def% buff", "suffix":"% DEF+ "}, {"skillid":"self rec% buff", "suffix":"% REC+ "}, {"skillid":"self crit% buff", "suffix":"% CRIT Chance+ "}];
 	var statsBuffArray=[{"skillid":"atk% buff (1)", "suffix":"% ATK+ "}, {"skillid":"def% buff (3)", "suffix":"% DEF+ "}, {"skillid":"rec% buff (5)", "suffix":"% REC+ "}];
     var bbCrystalsBuffArray=[{"skillid":"bc drop rate% buff (10)", "suffix":"% BC+ "}, {"skillid":"hc drop rate% buff (9)", "suffix":"% HC+ "}, {"skillid":"item drop rate% buff (11)", "suffix":"% Item+ "}, {"skillid":"karma drop rate% buff", "suffix":"% Karma+ "}];
     var bbSelfBuffArray=[{"skillid":"bb bc%", "suffix":"% BC+ "}, {"skillid":"bb hc%", "suffix":"% HC+ "}];
@@ -24,6 +24,7 @@
 	var bbElementMitiArray2=[{"skillid":"mitigate fire attacks (21)", "suffix":"Fire"}, {"skillid":"mitigate water attacks (22)", "suffix":"Water"}, {"skillid":"mitigate earth attacks (23)", "suffix":"Earth"}, {"skillid":"mitigate thunder attacks (24)", "suffix":"Thunder"}, {"skillid":"mitigate light attacks (25)", "suffix":"Light"}, {"skillid":"mitigate dark attacks (26)", "suffix":"Dark"}];
     var skillConnect=' / ';
     var bbArray=["bb", "sbb","ubb"];
+	var SPPassiveArray=["passive", "add to passive"];
 	var bbAddArray=["add to bb", "add to sbb", "add to ubb"];
     var lsSplit=' - ';
 	/* AI Array */

@@ -29,7 +29,6 @@
         {"skillid":"def% buff (4)", "skillref":["def% buff (4)", "!% DEF ", "target type", "! ", "buff turns","!Turns"]},
         {"skillid":"defense% ignore turns (39)", "skillref":["!Ignore DEF ", "target type", "! ","defense% ignore turns (39)", "!Turns"]},
         {"skillid":"crit% buff (7)", "skillref":["crit% buff (7)", "!% CRIT+ ", "target type", "! ", "buff turns","!Turns"]},
-		{"skillid":"self crit% buff", "skillref":["self crit% buff", "!% CRIT+ ", "target type", "! ", "self stat buff turns","!Turns"]},
         {"skillid":"buff turns (84)", "skillref":["crit multiplier%", "!% CRIT DMG+ ", "! ", "target type", "! ", "buff turns (84)","!Turns"]},
         {"skillid":"max hp% increase", "skillref":["max hp% increase", "!% Max HP+ till Death/Battle End"]},
         {"skillid":"spark dmg% buff (40)", "skillref":["spark dmg% buff (40)", "!% Spark DMG+ ", "target type", "! ", "buff turns","!Turns"]},

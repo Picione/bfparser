@@ -192,7 +192,16 @@ function findSPkill(objectSP) {
                         else
                           groupSTR+=")"
                     } /*End Grouping check*/
-                    
+                   else if (skillSeek=="counter ails") {
+                      for (ix in lscailsArray) {
+                          $.each( objectSP["effects"][pj]["passive"], function( effectKey, effectVal ) {
+                            if (effectKey==lscailsArray[ix]["skillid"]) {
+                              groupSTR+=effectVal+lscailsArray[ix]["suffix"];
+                              effectFound=true;
+                            }
+                          })
+                      }
+                    } /*End Grouping check*/
                     /*Check collective xturns buff*/
                     else if (skillSeek=="xturns buff") {
                       for (ix in lsXTurnsArray) {
@@ -604,19 +613,77 @@ function findSPkill(objectSP) {
 
             /*check for missing skill effects*/
             if (lsSkillFound < objectSP["effects"].length) {
-              functionSTR+='+ Undefined effect(s)[';
-              /*for (n=0;n<objectSP["effects"].length;n++) {
-              	if (objectSP["effects"][n]["passive"]["unknown passive id"]) {
-              	functionSTR+='(passiveid:'+objectSP["effects"][n]["passive"]["unknown passive id"]+';param:'+objectSP["effects"][n]["passive"]["unknown passive params"]+')';
-              	}
-				for (pk=0;pk<bbAddArray.length;pk++) {
-              	if (objectSP["effects"][n][bbAddArray[pk]])
-				if (objectSP["effects"][n][bbAddArray[pk]]["unknown proc id"]) {
-              	functionSTR+='(procid:'+objectSP["effects"][n][bbAddArray[pk]]["unknown proc id"]+';param:'+objectSP["effects"][n][bbAddArray[pk]]["unknown proc params"]+')';
-              	}
+			  var uparams = [];
+			  for (n=0;n<objectSP["effects"].length;n++) {
+				  for(SPArray=0;SPArray<SPPassiveArray.length;SPArray++){
+              		if (objectSP["effects"][n][SPPassiveArray[SPArray]]){
+			  if (objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive id"]){	
+				if (objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive id"] == 100) {
+						uparams = [];
+						uparams = objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive params"].split(",");
+						if (SPPassiveArray[SPArray] == "add to passive")
+							functionSTR+="Upgrade LS ";
+						functionSTR+=' {'+uparams[0]+'% Chance for Critial Spark ('+uparams[1]+'% DMG+)} ';
 				}
-              }*/
-              functionSTR+=']';
+				else if (objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive id"] == 106) {
+						uparams = [];
+						uparams = objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive params"].split(",");
+						if (SPPassiveArray[SPArray] == "add to passive")
+							functionSTR+="Upgrade LS ";
+						functionSTR+=' {After OverDrive, '+uparams[2]+' Time(s) '+uparams[1]+'% Chance Withstand a KNOCKOUT ATK (Heal '+uparams[3]+'% HP)} ';
+				}
+				else if (objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive id"] == 103) {
+						uparams = [];
+						uparams = objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive params"].split(",");
+						if (SPPassiveArray[SPArray] == "add to passive")
+							functionSTR+="Upgrade LS ";
+						functionSTR+=' {'+uparams[0]+'BB ATK%+ (HP >= '+uparams[3]+'%) } ';
+				}
+				else if (objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive id"] == 112) {
+						uparams = [];
+						uparams = objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive params"].split(",");
+						if (SPPassiveArray[SPArray] == "add to passive")
+							functionSTR+="Upgrade LS ";
+						functionSTR+=' {'+uparams[0]+'%ABP+ '+uparams[1]+'%CBP+} ';
+				}
+				else if (objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive id"] == 111) {
+						uparams = [];
+						uparams = objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive params"].split(",");
+						if (SPPassiveArray[SPArray] == "add to passive")
+							functionSTR+="Upgrade LS ";
+						functionSTR+=' {'+uparams[0]+'%Chance+ to BB/SBB in Arena/Coliseum} ';
+				}
+				else if (objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive id"] == 110) {
+						uparams = [];
+						uparams = objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive params"].split(",");
+						if (SPPassiveArray[SPArray] == "add to passive")
+							functionSTR+="Upgrade LS ";
+						functionSTR+=' {'+uparams[4]+'% Chance to Drain '+uparams[2]+'%/'+uparams[3]+'% Enemy BB/SBB in Arena/Coliseum} ';
+				}
+				else if (objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive id"] == 72) {
+						uparams = [];
+						uparams = objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive params"].split(",");
+						if (SPPassiveArray[SPArray] == "add to passive")
+							functionSTR+="Upgrade LS ";
+						if (uparams[0] == 1)
+							functionSTR+="Heal Each Turn Effect ";
+						if (uparams[1] == 1){
+							if(uparams[0] == 1)
+								functionSTR+="& ";
+							functionSTR+="BB Fill Each Turn Effect "
+						}
+						functionSTR+='Incur At The Begin of Turn (Exceptions for 1st Turn in Arena and Colo)';
+				}
+				else {
+              	if (SPPassiveArray[SPArray] == "add to passive")
+							functionSTR+="Upgrade LS ";
+				functionSTR+='+ Undefined effect(s)['+'(passiveid:'+objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive id"]+';param:'+objectSP["effects"][n][SPPassiveArray[SPArray]]["unknown passive params"]+')]';
+              	}
+			  } else 
+			  	functionSTR+='+ Undefined effect(s)[]';
+              }
+				  }
+			}
             }
           }
 			}
