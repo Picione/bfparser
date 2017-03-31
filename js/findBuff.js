@@ -3,6 +3,8 @@ function findBuff(objectPS) {
 		  var buffSTR="";
           var BuffFound=0;
           var genderTemp="";
+		  var uparams = [];
+		  var eTurn = 0;
           if (objectPS) 
               {
               for (bi=0;bi<buffParseObj.length;bi++) {
@@ -11,12 +13,37 @@ function findBuff(objectPS) {
                 /*resets var for each effect*/
                 var groupSTR="";
 				var effectFound=false;
+				var buffID;
                   $.each( objectPS, function( effectKey, effectVal ) {
-                    if (effectKey==skillSeek) {
-                      effectFound=true;
-                    }
-                  }) /*End non-groubing*/
-                  
+                    if (effectKey.indexOf("buff turn")!=-1) 
+                      buffID=effectKey.split("(")[1].split(")")[0];
+				    
+					if(buffID==skillSeek){
+						effectFound=true;
+                    } else if (effectKey==skillSeek) {
+						effectFound=true;
+					}
+                  }) 
+				  if (buffID=="74") {
+					  if (objectPS["unknown buff params"]) {
+						uparams = [];
+						uparams = objectPS["unknown buff params"].split("&");
+						eTurn = parseInt(objectPS["buff turns (74)"]);
+						groupSTR+=uparams[1]+'% Chance '+uparams[0]+'% Enemies ATK for '+uparams[2]+'Turns (SELF)';
+						}
+				  } else if (buffID=="75"){
+					  if (objectPS["unknown buff params"]) {
+						uparams = [];
+						uparams = objectPS["unknown buff params"].split("&");
+						eTurn = parseInt(objectPS["buff turns (75)"]);
+						groupSTR+=uparams[1]+'% Chance '+uparams[0]+'% Enemies DEF for '+uparams[2]+'Turns (SELF)';
+						}					  
+				  } else if(buffID=="132") {
+						uparams = [];
+						uparams = objectPS["unknown buff params"].split("&");
+						eTurn = parseInt(objectPS["buff turns (132)"]);
+						groupSTR+=uparams[0]+'% OD Fill Rates (SELF) for '+uparams[1]+'Turns (SELF)';
+				  }  /*End non-groubing*/                  
                   /*Build output string*/
                   if (effectFound) {
                   /*add connector if not first skill found*/
@@ -54,6 +81,9 @@ function findBuff(objectPS) {
                                 case "self":
                                   exportValue="(SELF)";
                                   break;
+								case "attack":
+                                  exportValue="ATK";
+                                  break;	  
                                 case "recovery":
                                   exportValue="REC";
                                   break;
@@ -92,22 +122,6 @@ function findBuff(objectPS) {
 				var uparams = [];
 				var eTurn = 0;
               	if (objectPS["unknown buff id"]) {
-              		if(objectPS["unknown buff id"] == 132) {
-						uparams = [];
-						uparams = objectPS["unknown buff params"].split("&");
-						eTurn = parseInt(objectPS["buff turns (132)"]);
-						buffSTR+=' {'+uparams[0]+'% OD Fill Rates (SELF) for '+uparams[1]+'Turns} for '+eTurn+' Turns';
-					} else if(objectPS["unknown buff id"] == 74) {
-						uparams = [];
-						uparams = objectPS["unknown buff params"].split("&");
-						eTurn = parseInt(objectPS["buff turns (74)"]);
-						buffSTR+=' {'+uparams[1]+'% Chance '+uparams[0]+'% Enemies ATK for '+uparams[2]+'Turns (SELF)}  for '+eTurn+' Turns';
-					} else if(objectPS["unknown buff id"] == 75) {
-						uparams = [];
-						uparams = objectPS["unknown buff params"].split("&");
-						eTurn = parseInt(objectPS["buff turns (75)"]);
-						buffSTR+=' {'+uparams[1]+'% Chance '+uparams[0]+'% Enemies DEF for '+uparams[2]+'Turns (SELF)}  for '+eTurn+' Turns';
-					} else
 				buffSTR+='+ Undefined effect(s)[(buffid:'+objectPS["unknown buff id"]+';param:'+objectPS["unknown buff params"]+')]';
               	}
             }

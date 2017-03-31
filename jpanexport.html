@@ -91,7 +91,7 @@ $.getJSON( serverSelect, function( unit ) {
     var rangeID=parseInt($("#refID").val());
     $.each( unit, function( unitKey, valObj ) {
         var exportSTR='';
-        if (valObj.rarity >= 7) {
+        if (valObj.rarity == 8) {
         	var idFound=true;
 			if (onlyNew) {
 			for (ki=0;ki<knownES.length;ki++) {

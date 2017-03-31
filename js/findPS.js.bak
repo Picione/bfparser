@@ -1,5 +1,6 @@
 function findPSkill(objectPS, type) {
 		  /*Parsing LS Skills*/
+		  var uparams = [];
 		  var functionSTR="";
   		  var eSkill=false;
 		  var conES=false;
@@ -17,14 +18,10 @@ function findPSkill(objectPS, type) {
               if (objectPS[conef]) {
               for (pi=0;pi<lsParseObj.length;pi++) {
                 var skillSeek=lsParseObj[pi]["skillid"];
-				var skillCmt=lsParseObj[pi]["cmt"];
                 /*looking each effect array*/
                 for (pj=0;pj<objectPS[conef].length;pj++) {
                     /*resets var for each effect*/
-                    if (objectPS[conef][pj]['passive id'])
-						var lsPassiveID=objectPS[conef][pj]['passive id'];
-					else 
-						var lsPassiveID=objectPS[conef][pj]['unknown passive id'];
+                    var lsPassiveID=objectPS[conef][pj]['passive id'];
                     var groupSTR="";
 					var conSTR="";
                     var effectFound=false;
@@ -57,191 +54,144 @@ function findPSkill(objectPS, type) {
 						}
 					}
 					if (objectPS[conef][pj]["triggered effect"])
-						triggerSkill+=findASkill(objectPS[conef][pj]["triggered effect"]);
-					if (objectPS[conef][pj]["buff"])
-						triggerSkill+=findBuff(objectPS[conef][pj]["buff"]);
+						triggerSkill+='<i>'+findASkill(objectPS[conef][pj]["triggered effect"])+'</i>';
+					for (triggerCC=0;triggerCC<triggerCon.length;triggerCC++)
+						if (objectPS[conef][pj][triggerCon[triggerCC]])
+							triggerSkill+='<i>'+findBuff(objectPS[conef][pj]["buff"])+'</i>';
 					/*Check collective group buff*/
-                    if (skillCmt.indexOf("Stats Buff c:")===0) {
+                    if (skillSeek=="stats buff") {
                       for (ix in lsstatsBuffArray) {
                           $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                             if (effectKey==lsstatsBuffArray[ix]["skillid"]) {
                               groupSTR+=effectVal+lsstatsBuffArray[ix]["suffix"];
-                            }
-                          })
-                    }
-                      /*checks unique elements requirements*/
-					switch (lsPassiveID) {
-						case "1":
-							break;
-						case "2":
-							break;
-						case "3":{ 	
-							if (objectPS[conef][pj]["unit type buffed"]) 
-													genderTemp=objectPS[conef][pj]["unit type buffed"].toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-                          	groupSTR+=" ("+genderTemp+")";
-						}
-							break;
-					
-						case "11":{
-							if (objectPS[conef][pj]["hp below % buff requirement"])
-								groupSTR+=" (HP < "+objectPS[conef][pj]["hp below % buff requirement"]+"%)";
-							if (objectPS[conef][pj]["hp above % buff requirement"])
-								groupSTR+=" (HP >= "+objectPS[conef][pj]["hp above % buff requirement"]+"%)";
-						}
-							break;
-						case "30":{
-							if (objectPS[conef][pj]["bb gauge above % buff requirement"])
-								groupSTR+=" (BB >= "+objectPS[conef][pj]["bb gauge above % buff requirement"]+"%)";
-							if (objectPS[conef][pj]["bb gauge below % buff requirement"])
-								groupSTR+=" (BB < "+objectPS[conef][pj]["bb gauge below % buff requirement"]+"%)";
-						}
-							break;
-						case "41":
-							groupSTR+=" ("+objectPS[conef][pj]["unique elements required"]+" elements required)";
-							break;
-						case "42":{
-							if (objectPS[conef][pj]["gender required"]) 
-													genderTemp=objectPS[conef][pj]["gender required"].toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-                          	groupSTR+=" ("+genderTemp+")";     
-             
-						}
-							break;
-						case "44":
-							break;
-					}
-                    } /*End Grouping check*/
-                    /*Check collective group crystals buff*/
-					else if (skillSeek=="40") {
-                      for (ix in lsstatsBuffArray) {
-                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
-                            if (effectKey==lsstatsBuffArray[ix]["skillid"]) {
-                              groupSTR+=effectVal+lsstatsBuffArray[ix]["suffix"];
+                              effectFound=true;
                             }
                           })
                       }
-					 }
-                    else if (skillSeek=="105") {
+                      /*checks unique elements requirements*/
+                      $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
+                        if (effectKey=="unique elements required")
+                          groupSTR+=" ("+effectVal+" elements required)";
+                        if (effectKey=="bb gauge above % buff requirement")
+                          groupSTR+=" (BB >= "+effectVal+"%)";
+                         if (effectKey=="bb gauge below % buff requirement")
+                          groupSTR+=" (BB < "+effectVal+"%)";
+                        if (effectKey=="hp below % buff requirement")
+                          groupSTR+=" (HP < "+effectVal+"%)";
+						if (effectKey=="hp above % buff requirement")
+                          groupSTR+=" (HP >= "+effectVal+"%)";
+					  	if (effectKey=="hp below % passive requirement")
+                          groupSTR+=" (HP < "+effectVal+"%)";
+					  	if (effectKey=="hp above % passive requirement")
+                          groupSTR+=" (HP >= "+effectVal+"%)";
+                        if (effectKey=="gender required") {
+                          genderTemp=effectVal.toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+                          groupSTR+=" ("+genderTemp+")";
+                        }
+						if ((effectKey=="unit type buffed") && (!conES)) {
+                          genderTemp=effectVal.toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+                          groupSTR+=" ("+genderTemp+")";
+                        }
+                      })
+                    } /*End Grouping check*/
+                    /*Check collective group crystals buff*/
+                    else if (skillSeek=="increase from min to max") {
                       for (ix in lsistatsBuffArray) {
                           $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                             if (effectKey==lsistatsBuffArray[ix]["skillid"]) {
                               groupSTR+=effectVal+lsistatsBuffArray[ix]["suffix"];
-                            }
-                          })
-                      }
-					 } 
-					else if (skillSeek=="46") {
-                      for (ix in lsbasestatsBuffArray) {
-                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
-                            if (effectKey==lsbasestatsBuffArray[ix]["skillid"]) {
-                              groupSTR+=objectPS[conef][pj][lsbasestatsBuffArray[ix]["altid"]]+"-"+ effectVal+lsbasestatsBuffArray[ix]["suffix"];
+                              effectFound=true;
                             }
                           })
                       }
 					 } /*End Grouping check*/
 					/*Check collective group crystals buff*/
-                    else if (skillCmt.indexOf("Drop Rate%")==0) {
+                    else if (skillSeek=="crystals buff") {
                       for (ix in lsCrystalsBuffArray) {
                           $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                             if (effectKey==lsCrystalsBuffArray[ix]["skillid"]) {
                               groupSTR+=effectVal+lsCrystalsBuffArray[ix]["suffix"];
+                              effectFound=true;
                             }
                           })
                       }
                     } /*End Grouping check*/
                     /*Check collective ails buff*/
-                    else if (skillSeek=="20") {
+                    else if (skillSeek=="ails") {
                       for (ix in lsailsArray) {
                           $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                             if (effectKey==lsailsArray[ix]["skillid"]) {
                               groupSTR+=effectVal+lsailsArray[ix]["suffix"];
+                              effectFound=true;
                             }
                           })
                       }
                     } /*End Grouping check*/
-					else if (skillSeek=="71") {
+                    
+					else if (skillSeek=="counter ails") {
                       for (ix in lscailsArray) {
                           $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                             if (effectKey==lscailsArray[ix]["skillid"]) {
                               groupSTR+=effectVal+lscailsArray[ix]["suffix"];
+                              effectFound=true;
                             }
                           })
                       }
                     } /*End Grouping check*/
+					
+					/**/
+					else if (skillSeek=="unknown") {
+					}
                     /*Check collective ails resist buff*/
-                    else if (skillSeek == "4" || skillSeek == "73") {
+                    else if (skillSeek=="ails resist") {
                       var resistCount=0;
 					  var resistCount2=0;
-					  var resistTxt='';
                       for (ix in lsailsResistArray) {
                           $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                             if (effectKey==lsailsResistArray[ix]["skillid"]) {
+								effectFound=true;
 								if (resistCount>0)
-									resistTxt+=',';
+									groupSTR+=',';
 								resistCount+=1;
 								if (effectVal == 100){
 								    resistCount2+=1;
-								    resistTxt+=lsailsResistArray[ix]["suffix"];
+								    groupSTR+=lsailsResistArray[ix]["suffix"];
 								} else 
-									resistTxt+='('+effectVal+'% '+lsailsResistArray[ix]["suffix"]+') ';
+									groupSTR+='('+effectVal+'% '+lsailsResistArray[ix]["suffix"]+') ';
 						        }
                           })
                       }
-					  if (resistCount2!=0)
-						  groupSTR+="Negate Ailments ";
-                      if (resistCount2==6)
-                          groupSTR+="(ALL)";
-					  else 
-						  groupSTR+=resistTxt;
-					  if (skillSeek=="73") {
+                      if (effectFound)
+                        if (resistCount2==6)
+                          groupSTR="All";
+                    } /*End Grouping check*/
+                    
+					/*Check collective db resist buff*/
+                    else if (skillSeek=="db resist") {
                       var resistCount=0;
 					  var resistCount2=0;
-				      var resistTxt='';
-					  groupSTR+="Negate Debuffs "
                       for (ix in lsdbResistArray) {
                           $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                             if (effectKey==lsdbResistArray[ix]["skillid"]) {
+								effectFound=true;
 								if (resistCount>0)
-									resistTxt+=',';
+									groupSTR+=',';
 								resistCount+=1;
 								if (effectVal == 100){
 								    resistCount2+=1;
-								    resistTxt+=lsdbResistArray[ix]["suffix"];
+								    groupSTR+=lsdbResistArray[ix]["suffix"];
 								} else 
-									resistTxt+='('+effectVal+'% '+lsdbResistArray[ix]["suffix"]+') ';
+									groupSTR+='('+effectVal+'% '+lsdbResistArray[ix]["suffix"]+') ';
 		                        }
                           })
                       }
+                      if (effectFound)
                         if (resistCount2==3)
-                          groupSTR+="(ALL)";
-						  else groupSTR+=resistTxt;
-                      }
+                          groupSTR="All";
                     } /*End Grouping check*/
-					else if (skillSeek=="53") {
-                      for (ix in lsDMGResistArray) {
-                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
-                            if (effectKey==lsDMGResistArray[ix]["skillid"]) {
-                              groupSTR+=objectPS[conef][pj][lsDMGResistArray[ix]["altid"]]+"-"+ effectVal+lsDMGResistArray[ix]["suffix"];
-                            }
-                          })
-                      }
-                    }
+					
 					/*Elemental mitigation check*/
-                    else if (skillSeek==5) {
-                      var elementCount=0;
-                      for (ix in lsElementResistArray) {
-                          $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
-                            if (effectKey==lsElementResistArray[ix]["skillid"]) {
-                                if (elementCount>0)
-                                  groupSTR+=",";
-                                elementCount+=1;
-                                if (elementCount==1)
-                                groupSTR+=effectVal+'% '+lsElementResistArray[ix]["suffix"];
-                            }
-                          })
-                      }
-                    } /*End Grouping check*/
-					/*Elemental mitigation check*/
-                    else if (skillCmt.indexOf("Mitigate Elemental")=="0") {
+                    else if (skillSeek=="element mitigate") {
                       var elementCount=0;
                       for (ix in lsElementMitiArray) {
                           $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
@@ -252,17 +202,21 @@ function findPSkill(objectPS, type) {
                                 if (elementCount==1)
                                   groupSTR+="("
                                 groupSTR+=lsElementMitiArray[ix]["suffix"];
+                                effectFound=true;
                             }
                           })
                       }
+                      if (effectFound)
                         if (elementCount==6)
-                          groupSTR="(All Elements)"
-                        else if (elementCount!=0)
+                          groupSTR="(ALL)"
+                        else
                           groupSTR+=")"
                     } /*End Grouping check*/
+
 					/*Passive Elemental ATK check*/
-                    else if (skillSeek=="102") {
+                    else if (skillSeek=="passive element added") {
                       if (objectPS[conef][pj]["elements added"]) {
+						effectFound=true;
 						 var elementCount=objectPS[conef][pj]["elements added"].length;
 						for (ix=0;ix<elementCount;ix++){
 							    if (ix>0)
@@ -273,27 +227,15 @@ function findPSkill(objectPS, type) {
 						}
 					  }
 					 
+                      if (effectFound)
                         if (elementCount==6)
-                          groupSTR="(All Elements)"
-                        else if (elementCount!=0)
+                          groupSTR="(ALL)"
+                        else
                           groupSTR+=")"
-                    } /*End Grouping check*/	
-					else if (skillSeek=="31") {
-                      if (objectPS[conef][pj]["bc drop% for spark"]) 
-                          groupSTR+=objectPS[conef][pj]["bc drop% for spark"]+"% BC Drop ";
-					  if (objectPS[conef][pj]["hc drop% for spark"]) 
-                          groupSTR+=objectPS[conef][pj]["hc drop% for spark"]+"% HC Drop ";
-					  if (objectPS[conef][pj]["damage% for spark"]) 
-                          groupSTR+=objectPS[conef][pj]["damage% for spark"]+"% DMG ";
-                    }
-					else if (skillSeek=="37") {
-                      if (objectPS[conef][pj]["extra hits dmg%"]) 
-                          groupSTR+=objectPS[conef][pj]["extra hits dmg%"];
-					  else
-						  groupSTR+="0";
-                    }
+                    } /*End Grouping check*/
+					
                     /*Elemental weakness check*/
-                    else if (skillSeek=="50") {
+                    else if (skillSeek=="element weakness") {
                       var elementCount=0;
                       for (ix in lsWeakElementArray) {
                           $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
@@ -304,27 +246,31 @@ function findPSkill(objectPS, type) {
                                 if (elementCount==1)
                                   groupSTR+="("
                                 groupSTR+=lsWeakElementArray[ix]["suffix"];
+                                effectFound=true;
                             }
                           })
                       }
-
+                      if (effectFound)
                         if (elementCount==6)
-                          groupSTR="(All Elements)"
-                        else if (elementCount!=0)
+                          groupSTR="(ALL)"
+                        else
                           groupSTR+=")"
-                    } /*End Grouping check*/           
+                    } /*End Grouping check*/
+                    
                     /*Check collective xturns buff*/
-                    else if (skillSeek=="21") {
+                    else if (skillSeek=="xturns buff") {
                       for (ix in lsXTurnsArray) {
                           $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
                             if (effectKey==lsXTurnsArray[ix]["skillid"]) {
                               groupSTR+=effectVal+lsXTurnsArray[ix]["suffix"];
+                              effectFound=true;
                             }
                           })
                       }
                     } /*End Grouping check*/
+					
 					/*Check collective trigger buff*/
-					else if (skillSeek=="66") {
+					else if (skillSeek=="triggered effect") {
 					  var TriggerCount=0;
                       for (ix in esTrigger) {
                           $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
@@ -335,7 +281,7 @@ function findPSkill(objectPS, type) {
                                 if (TriggerCount==1)
                                   groupSTR+="(";
                                 groupSTR+=esTrigger[ix]["suffix"];
-
+                                effectFound=true;
 						  }
                           })
                       }
@@ -344,112 +290,14 @@ function findPSkill(objectPS, type) {
 					  else
 					     groupSTR+=")";
                     } /*End Grouping check*/
-                    else if (skillSeek=="100") {
-						uparams = [];
-						if (objectPS[conef][pj]["unknown passive params"]) {	
-							uparams = objectPS[conef][pj]["unknown passive params"].split(",");
-							groupSTR+=' {'+uparams[0]+'% Chance for Critial Spark ('+uparams[1]+'% DMG+)} ';
-						}
-					}
-					else if (skillSeek=="106") {
-						uparams = [];
-						if (objectPS[conef][pj]["unknown passive params"]) {
-							uparams = objectPS[conef][pj]["unknown passive params"].split(",");
-							groupSTR+=' {After OverDrive, '+uparams[2]+' Time(s) '+uparams[1]+'% Chance Withstand a KNOCKOUT ATK (Heal '+uparams[3]+'% HP)} ';
-						}
-					}
-					else if (skillSeek=="112") {
-						uparams = [];
-						if (objectPS[conef][pj]["unknown passive params"]) {
-							uparams = objectPS[conef][pj]["unknown passive params"].split(",");
-							groupSTR+=' {'+uparams[0]+'%ABP+ '+uparams[1]+'%CBP+} ';
-						}
-					}
-					else if (skillSeek=="111") {
-						uparams = [];
-						if (objectPS[conef][pj]["unknown passive params"]) {
-							uparams = objectPS[conef][pj]["unknown passive params"].split(",");
-							groupSTR+=' {'+uparams[0]+'%Chance+ to BB/SBB in Arena/Coliseum} ';
-						}
-					}
-					else if (skillSeek=="110") {
-						uparams = [];
-						if (objectPS[conef][pj]["unknown passive params"]) {
-							uparams = objectPS[conef][pj]["unknown passive params"].split(",");
-							groupSTR+=' {'+uparams[4]+'% Chance to Drain '+uparams[2]+'%/'+uparams[3]+'% Enemy BB/SBB in Arena/Coliseum} ';
-						}
-					}
-					else if (skillSeek=="109") {
-						uparams = [];
-						if (objectPS[conef][pj]["unknown passive params"]) {
-							uparams = objectPS[conef][pj]["unknown passive params"].split(",");
-							groupSTR+=' {'+uparams[1]+'% Chance to Debuff '+uparams[0]+'%'+'% BB Fill Rate in Arena/Coliseum for '+uparams[2]+'Turn(s)} ';
-						}
-					}					
-					else if (skillSeek=="103") {
-						uparams = [];
-						if (objectPS[conef][pj]["unknown passive params"]) {
-						uparams = objectPS[conef][pj]["unknown passive params"].split(",");
-						if ((uparams[0]==uparams[1]) && (uparams[0]==uparams[2]) && (uparams[2]==uparams[1]))
-							groupSTR+=' {'+uparams[0]+'BB ATK%+ (HP >= '+uparams[3]+'%) } ';
-						else { 
-							for (u in uparams) {
-								if (uparams[0]>0)
-								groupSTR+=' {'+uparams[0]+'BB ATK%+ to BB ';
-								if (uparams[1]>0)
-								groupSTR+=' {'+uparams[1]+'BB ATK%+ to SBB ';
-								if (uparams[2]>0)
-								groupSTR+=' {'+uparams[2]+'BB ATK%+ to UBB ';
-								groupSTR+='(HP >= '+uparams[3]+'%) } ';
-							}
-						}	
-						}
-					}
-					else if (skillSeek=="113") {
-						uparams = [];
-						if ((objectPS[conef][pj]["unknown passive params"]) && (lsPassiveID==113)) {
-						uparams = objectPS[conef][pj]["unknown passive params"].split(",");
-						var uparams2 = uparams[1].split("&");
-						if ((uparams2[0]==uparams2[1]) && (uparams2[0]==uparams2[2]) && (uparams2[2]==uparams2[1]))
-							groupSTR+=' {'+uparams2[0]+'BB ATK%+ (HP >= '+uparams[2]+'%) } ';
-						else { 
-							for (u in uparams) {
-								if (uparams2[0]>0)
-								groupSTR+=' {'+uparams2[0]+'BB ATK%+ to BB ';
-								if (uparams2[1]>0)
-								groupSTR+=' {'+uparams2[1]+'BB ATK%+ to SBB ';
-								if (uparams2[2]>0)
-								groupSTR+=' {'+uparams2[2]+'BB ATK%+ to UBB ';
-								groupSTR+='(HP >= '+uparams[2]+'%) } ';
-							}
-						}	
-						}
-					}
-					else if (skillSeek=="143") {
-						uparams = [];
-						if (objectPS[conef][pj]["unknown passive params"]) {
-						uparams = objectPS[conef][pj]["unknown passive params"].split(",");
-						groupSTR+=' {Increase ATK Cap to '+uparams[0]+'} ';
-						}
-					}  
-					else if (skillSeek=="72") {
-						uparams = [];
-						if (objectPS[conef][pj]["unknown passive params"]) {
-						uparams = objectPS[conef][pj]["unknown passive params"].split(",");
-						if (uparams[0] == 1)
-							groupSTR+="Heal Over Turn Effect ";
-						if (uparams[1] == 1){
-							if(uparams[0] == 1)
-								functionSTR+="& ";
-							groupSTR+="BB Fill Each Turn Effect "
-						}
-						groupSTR+='Incur At The Begin of Turn (Exceptions for 1st Turn in Arena and Colo)';
-						}
-					}
-					
-                    if (lsPassiveID==skillSeek) {
+                    
+                    else
+                  /*looping non grouping buff*/
+                  $.each( objectPS[conef][pj], function( effectKey, effectVal ) {
+                    if (effectKey==skillSeek) {
                       effectFound=true;
-                    } /*End non-grouping*/
+                    }
+                  }) /*End non-grouping*/
                   
                   /*Build output string*/
                   if (effectFound) {
@@ -495,9 +343,6 @@ function findPSkill(objectPS, type) {
                                 case "recovery":
                                   exportValue="REC";
                                   break;
-								case "attack":
-                                  exportValue="REC";
-                                  break;
                                 case "defense":
                                   exportValue="DEF";
                                   break;
@@ -524,7 +369,7 @@ function findPSkill(objectPS, type) {
                         eleString=eleString.toString().replace(/\w\S*/g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
                         functionSTR+=eleString;
                       }
-                      else if ((skillSeek!="50") && (genderTemp=="") && (type != "IT") && (type != "ES") && (type != "SP"))
+                      else if ((skillSeek!="element weakness") && (genderTemp=="") && (type != "IT") && (type != "ES") && (type != "SP"))
                         functionSTR+=' (ALL)';
                   } /*End Output String Build*/
                 }
@@ -532,12 +377,62 @@ function findPSkill(objectPS, type) {
             /*check for missing skill effects*/
             if (lsSkillFound < objectPS[conef].length) {
               for (n=0;n<objectPS[conef].length;n++) {
-              if (objectPS[conef][n]["unknown passive id"])
+              if (objectPS[conef][n]["unknown passive id"]){	
+				if (objectPS[conef][n]["unknown passive id"] == 100) {
+						uparams = [];
+						uparams = objectPS[conef][n]["unknown passive params"].split(",");
+						functionSTR+=' {'+uparams[0]+'% Chance for Critial Spark ('+uparams[1]+'% DMG+)} ';
+				}
+				else if (objectPS[conef][n]["unknown passive id"] == 106) {
+						uparams = [];
+						uparams = objectPS[conef][n]["unknown passive params"].split(",");
+						functionSTR+=' {After OverDrive, '+uparams[2]+' Time(s) '+uparams[1]+'% Chance Withstand a KNOCKOUT ATK (Heal '+uparams[3]+'% HP)} ';
+				}
+				else if (objectPS[conef][n]["unknown passive id"] == 112) {
+						uparams = [];
+						uparams = objectPS[conef][n]["unknown passive params"].split(",");
+						functionSTR+=' {'+uparams[0]+'%ABP+ '+uparams[1]+'%CBP+} ';
+				}
+				else if (objectPS[conef][n]["unknown passive id"] == 111) {
+						uparams = [];
+						uparams = objectPS[conef][n]["unknown passive params"].split(",");
+						functionSTR+=' {'+uparams[0]+'%Chance+ to BB/SBB in Arena/Coliseum} ';
+				}
+				else if (objectPS[conef][n]["unknown passive id"] == 110) {
+						uparams = [];
+						uparams = objectPS[conef][n]["unknown passive params"].split(",");
+						functionSTR+=' {'+uparams[4]+'% Chance to Drain '+uparams[2]+'%/'+uparams[3]+'% Enemy BB/SBB in Arena/Coliseum} ';
+				}
+				else if (objectPS[conef][n]["unknown passive id"] == 103) {
+						uparams = [];
+						uparams = objectPS[conef][n]["unknown passive params"].split(",");
+						functionSTR+=' {'+uparams[0]+'BB ATK%+ (HP >= '+uparams[3]+'%) } ';
+				}
+				else if (objectPS[conef][n]["unknown passive id"] == 143) {
+						uparams = [];
+						uparams = objectPS[conef][n]["unknown passive params"].split(",");
+						functionSTR+=' {Increase ATK Cap to '+uparams[0]+'} ';
+				}  
+				else if (objectPS[conef][n]["unknown passive id"] == 72) {
+						uparams = [];
+						uparams = objectPS[conef][n]["unknown passive params"].split(",");
+						if (uparams[0] == 1)
+							functionSTR+="Heal Each Turn Effect ";
+						if (uparams[1] == 1){
+							if(uparams[0] == 1)
+								functionSTR+="& ";
+							functionSTR+="BB Fill Each Turn Effect "
+						}
+						functionSTR+='Incur At The Begin of Turn (Exceptions for 1st Turn in Arena and Colo)';
+				}
+				else {
               	functionSTR+='+ Undefined effect(s)['+'(passiveid:'+objectPS[conef][n]["unknown passive id"]+';param:'+objectPS[conef][n]["unknown passive params"]+')]';
+              	}
 			  }
               }
             }
           }
+			}
               /*End of LS Effects Loop*/
 		  if (functionSTR) return functionSTR;
 }

@@ -70,17 +70,14 @@
 <div class="container-fluid" style="margin:0px;padding:5px;">
 <div style="min-height:55px;"></div>
 
-<input type="text" id="refID" class="form-control">
-<button type="button" id="newBtn" class="btn btn-default">Only New</button>
 <button type="button" id="exportBtn" class="btn btn-default">Export</button>
-<button type="button" id="SPBtn" class="btn btn-default">Get DM Skill</button>
-<button type="button" id="clearBtn" class="btn btn-default">Clear</button>
 
 <div id="rawText">
+<div id="g0">
 <div id="result0"></div>
 </br>
 <div id="sp0"></div>
-</div>
+</div></div>
 <font color="#FF0004"><i>*Credit to Deathmax for Datamining</br>
 *Please note that the details are expected to change during the maintenance. Recheck at<a href="http://touchandswipe.github.io/bravefrontier/unitsguide"> BFPros Unit Guide</a> after the maintenance.​</i></font>
 <script type="text/javascript">
@@ -90,85 +87,50 @@ var onlyNew=false;
 var rCount=0;
 var rArray = [];
 var maxEvol= [];
-$(document).on("click","#newBtn", function(e) {
-  onlyNew=true;
-  $.getJSON( serverSelect, function( unit ) {
-		$.each( unit, function( unitKey, valObj ) {
-        if (maxEvol.length == 0){
-			maxEvol[maxEvol.length]={"cat":valObj.category,"max":valObj.rarity};
-		} else {
-		var mEcheck=false;
-		for (mE=0;mE<maxEvol.length;mE++){
-			if (maxEvol[mE]["cat"] == valObj.category){
-				mEcheck=true;
-				if (maxEvol[mE]["max"] < valObj.rarity)
-				maxEvol[mE]["max"]=valObj.rarity;
-			}
-		}
-		if (!mEcheck) {
-			maxEvol[maxEvol.length]={"cat":valObj.category,"max":valObj.rarity};
-		}
-		}
-		})
-  })
-})
-$(document).on("click","#clearBtn", function(e) {
-  $('#rawText').empty();
-  $('#rawText').append('<div id="result'+rCount+'"></div></br><div id="sp'+rCount+'"></div>');
-  onlyNew=false;
-})
+$('#i10017').click(function() {$('#result0').toggle();$('#sp0').toggle();});
 $(document).on("click","#exportBtn", function(e) {
 $.getJSON( serverSelect, function( unit ) {
     /*Process for Each Unit*/
 		var rangeID=parseInt($("#refID").val());
 		$.each( unit, function( unitKey, valObj ) {
 		var rID = "#result" + rCount.toString();
+		var gID = "#g" + rCount.toString();
+		var generalSTR='';
 		var exportSTR='';
-        if (onlyNew) {
-		if (valObj.guide_id >= knownUN) {
-            var idFound=false;
-			for (mEc=0;mEc<maxEvol.length;mEc++){
-				if ((valObj.category == maxEvol[mEc]["cat"]) && (valObj.rarity == maxEvol[mEc]["max"]))
-					idFound=true;
-			}
-        } else {
-            var idFound=false;
-        }
-		} else {
-		if (valObj.guide_id == rangeID) {
+		if (valObj.rarity == 8) {
             var idFound=true;
         } else {
             var idFound=false;
         }
-		}
         /*Parsing code here*/
         if (idFound) {
           /*Thumb*/
-		    exportSTR+='<center>';
-            exportSTR+='<img src="http://cdn.android.brave.a-lim.jp//unit/img/unit_ills_thum_'+unitKey+'.png"/></br>';
+		    generalSTR+='<center>';
+			//generalSTR+="$('#"+unitKey+"').click(function() {"+"$('"+gID+"').toggle();});";
+            generalSTR+='<img src="http://cdn.android.brave.a-lim.jp//unit/img/unit_ills_thum_'+unitKey+'.png" id="i'+unitKey+'"/></br>';
           /*ID*/
-            exportSTR+='Guide ID: '+valObj.guide_id;
+            generalSTR+='Guide ID: '+valObj.guide_id;
 			
           /*SystemID*/
-            exportSTR+=' (RefID: '+unitKey+')</br>';
+            generalSTR+=' (RefID: '+unitKey+')</br>';
 			
           /*NAME*/
           if (valObj.name)
-              exportSTR+='Name: '+valObj.name+'</br>'
-          else exportSTR+='</br>';
+              generalSTR+='Name: '+valObj.name+'</br>'
+          else generalSTR+='</br>';
           
           /*Cost and max lvl spacing*/
           if (valObj.cost) 
-              exportSTR+='Cost: '+valObj.cost+' - ';
+              generalSTR+='Cost: '+valObj.cost+' - ';
 		  
           /*SERIES spacing and Element*/
           if (valObj.element)
-              exportSTR+=valObj.element.charAt(0).toUpperCase() + valObj.element.substr(1).toLowerCase()+' - ';
+              generalSTR+=valObj.element.charAt(0).toUpperCase() + valObj.element.substr(1).toLowerCase()+' - ';
           
           /*Rarity*/
           if (valObj.rarity) 
-              exportSTR+=valObj.rarity+'*</br>';
-     		exportSTR+='</center>';
+              generalSTR+=valObj.rarity+'*</br>';
+     		generalSTR+='</center>';
      	  /*imp data*/
           if (valObj.stats && valObj.imp) {
 		    exportSTR+='<b>Stats(Lord)+Imps </b>'
@@ -267,17 +229,16 @@ $.getJSON( serverSelect, function( unit ) {
 		  
 	    /* Arena Type */
 	    exportSTR+='</br>AI: '+findAI(valObj);
+		$(gID).append(generalSTR+'</br>');
 		$(rID).append(exportSTR+'</br>');
-		var rSP = "#sp" + rCount.toString();
+				var rSP = "#sp" + rCount.toString();
 		rArray[rArray.length] = {"unitKey":unitKey, "holder":rSP};	 
 		rCount+=1;
-		$('#rawText').append('</br><div id="result'+rCount+'"></div>');
-		$('#rawText').append('</br><div id="sp'+rCount+'"></div>');
+		$('#rawText').append('</br><div id="g'+rCount+'"><div id="result'+rCount+'"></div>');
+		$('#rawText').append('</br><div id="sp'+rCount+'"></div></div>');
         } /*End range check*/
 })
 })
-})
-$(document).on("click","#SPBtn", function(e) {
 $.getJSON( serverSelect2, function( unit ) {
     /*Process for Each Unit*/
 	for (spr=0;spr<rArray.length;spr++) {

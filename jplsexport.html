@@ -25,18 +25,16 @@
     }
 </style>
 <!-- START JSON Code-->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="js/passiveParse.js"></script>
 <script src="js/skillParse.js"></script>
 <script src="js/buffParse.js"></script>
 <script src="js/arrayParse.js"></script>
-<script src="js/knownESIT.js"></script>
-<script src="js/getname.js"></script>
 <script src="js/findAS.js"></script>
-<script src="js/findAI.js"></script>
-<script src="js/findSP.js"></script>
+<script src="js/findPS.js"></script>
 <script src="js/findBuff.js"></script>
+<script src="js/knownESIT.js"></script>
 </head>
 
 <!-- MAIN BODY CONTENT -->
@@ -70,77 +68,63 @@
 <div class="container-fluid" style="margin:0px;padding:5px;">
 <div style="min-height:55px;"></div>
 
-<input type="text" id="refID" class="form-control" placeholder="refID">
-<button type="button" id="allBtn" class="btn btn-default">ALL</button>
+<button type="button" id="newBtn" class="btn btn-default">Only New</button>
 <button type="button" id="exportBtn" class="btn btn-default">Export</button>
 <button type="button" id="clearBtn" class="btn btn-default">Clear</button>
 
-<div id="rawText"></div>
+<table id="rawTable" width="100%" class="small table-bordered table-condensed table-hover table-responsive"></table>
 <font color="#FF0004"><i>*Credit to Deathmax for Datamining</br>
 *Please note that the details are expected to change during the maintenance. Recheck at<a href="http://touchandswipe.github.io/bravefrontier/unitsguide"> BFPros Unit Guide</a> after the maintenance.​</i></font>
 <script type="text/javascript">
-var serverSelect="https://picione.github.io/bravefrontier_data/jp/feskills.json";
-var allInfo=false;
-$(document).on("click","#allBtn", function(e) {
-  allInfo=true;
+var serverSelect="https://picione.github.io/bravefrontier_data/jp/items_light.json";
+var onlyNew=false;
+$(document).on("click","#newBtn", function(e) {
+  onlyNew=true;
 })
 $(document).on("click","#clearBtn", function(e) {
-  $('#rawText').empty();
-  allInfo=false;
+  $('#rawTable').empty();
+  onlyNew=false;
 })
 $(document).on("click","#exportBtn", function(e) {
 $.getJSON( serverSelect, function( unit ) {
-    /*Process for Each Unit*/
-    	var rangeID=parseInt($("#refID").val());
-		$.each( unit, function( unitKey, valObj ) {
+$.each( unit, function( unitKey, valObj ) {
         var exportSTR='';
-        if (allInfo) {
-            var idFound=true;
+        if (onlyNew) {
+			if ((valObj.type == null) && (valObj["sphere type text"])) {
+        	var idFound=true;
+			if (onlyNew) {
+			for (ki=0;ki<knownIT.length;ki++) {
+			if (unitKey == knownIT[ki])
+				 var idFound=false;
+			}
+			}
+		    } else {
+            var idFound=false;
+			}
 		} else {
-		if (unitKey == rangeID) {
-            var idFound=true;
-        } else {
+		if ((valObj.type == null) && (valObj["sphere type text"])) {
+        	var idFound=true;
+		} else {
             var idFound=false;
         }
 		}
         /*Parsing code here*/
         if (idFound) {
-          /*Thumb*/
-		    exportSTR+='<center>';
-            exportSTR+='<img src="http://v2.cdn.android.brave.a-lim.jp//unit/img/unit_ills_thum_'+unitKey+'.png"/></br></center>';
-          /*Title*/
-            exportSTR+='<b>Dreammaker Skills</b></br>';
+          /*Start of Row*/
+		    exportSTR+='<tr>';
+          /*ID*/
+            exportSTR+='<th>'+unitKey+'</th>';
 			
-		  /*Category Loop*/
-		  	var categoryArray = [];
-			var catArrayCnt = 0;
-		  	for (spi=0;spi<=100;spi++) {
-				if (valObj["category"][spi]) {
-				categoryArray[catArrayCnt]=spi;
-				catArrayCnt+=1;
-				}
-			}
-			/**/
-			for (spk=0;spk<categoryArray.length;spk++) {
-				exportSTR+='<i>Category: '+valObj["category"][categoryArray[spk]]["name"]+'</i></br>';
-				for (spj=0;spj<valObj["skills"].length;spj++) {
-					if (valObj["skills"][spj]["category"] == categoryArray[spk]) {
-					exportSTR+=valObj["skills"][spj]["skill"]["bp"]+'SP-'+findSPkill(valObj["skills"][spj]["skill"],"SP");		
-					if (valObj["skills"][spj]["dependency"] != "") {
-						var reqBP = valObj["skills"][spj]["dependency"].substr(2);			
-						for (spm=0;spm<valObj["skills"].length;spm++) {
-							if (valObj["skills"][spm]["id"] == reqBP) {
-								exportSTR+=' [<i>Need ['+valObj["skills"][spm]["skill"]["bp"]+'SP-'+findSPkill(valObj["skills"][spm]["skill"],"SP")+'] to be unlocked</i>]</br>';
-							}
-						}
-					} else exportSTR+='</br>';
-					if (findSPkill(valObj["skills"][spj]["skill"],"SP").indexOf(indexTXT) != -1)
-					exportSTR+=valObj["skills"][spj]["skill"]["desc"]+'</br>';
-					}
-				}
-			}
-			
-	  	$("#rawText").append(exportSTR+'</br></br>');
+          /*Name*/
+            exportSTR+='<th>'+valObj.name+'</th>';
+			exportSTR+='<th>'+valObj["sphere type text"]+'</th>';
+			exportSTR+='<th>'+valObj["rarity"]+'</th>';
+		exportSTR+="<th>";
+		exportSTR+=valObj.desc+"</br>";
+		exportSTR+="</th>";
+      /*Parsing all BB Skills*/
+		 exportSTR+='</tr>';
+          $("#rawTable").append(exportSTR+'</br></br>');
         } /*End range check*/
 })
 })

@@ -27,7 +27,7 @@
 <!-- START JSON Code-->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script src="js/lsParse.js"></script>
+<script src="js/passiveParse.js"></script>
 <script src="js/skillParse.js"></script>
 <script src="js/buffParse.js"></script>
 <script src="js/arrayParse.js"></script>
@@ -68,8 +68,8 @@
 <font color="#FF0004"><i>*Credit to Deathmax for Datamining</br>
 *Please note that the details are expected to change during the maintenance. Recheck at<a href="http://touchandswipe.github.io/bravefrontier/unitsguide"> BFPros Unit Guide</a> after the maintenance.​</i></font>
 <script type="text/javascript">
-var serverSelect="http://picione.github.io/bravefrontier_data/jp/info.json";
-var serverSelect2="http://picione.github.io/bravefrontier_data/jp/feskills.json";
+var serverSelect="https://picione.github.io/bravefrontier_data/jp/info.json";
+var serverSelect2="https://picione.github.io/bravefrontier_data/jp/feskills.json";
 $(document).on("click","#clearBtn", function(e) {
   $('#rawText').empty();
 })
@@ -86,13 +86,14 @@ $.getJSON( serverSelect, function( unit ) {
         }
         /*Parsing code here*/
         if (idFound) {
-		 if (valObj["leader skill"]){
+		 if (findPSkill(valObj["leader skill"], "LS")){
+			
 		 if (findPSkill(valObj["leader skill"], "LS").indexOf(indexTXT) != -1)
 		 	newBuff=true;
 		 if (findPSkill(valObj["leader skill"], "LS").indexOf("undefined") != -1)
 		 	newBuff=true;
 		 }
-		 if (valObj["extra skill"]){
+		 if (findPSkill(valObj["extra skill"], "ES")){
 	     if (findPSkill(valObj["extra skill"], "ES").indexOf(indexTXT) != -1)
 		 	newBuff=true;
 		 if (findPSkill(valObj["extra skill"], "ES").indexOf("undefined") != -1)

@@ -27,7 +27,7 @@
 <!-- START JSON Code-->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script src="js/lsParse.js"></script>
+<script src="js/passiveParse.js"></script>
 <script src="js/skillParse.js"></script>
 <script src="js/buffParse.js"></script>
 <script src="js/arrayParse.js"></script>
@@ -69,6 +69,7 @@
 <div style="min-height:55px;"></div>
 
 <button type="button" id="newBtn" class="btn btn-default">Only New</button>
+<button type="button" id="highBtn" class="btn btn-default">6* and up</button>
 <button type="button" id="exportBtn" class="btn btn-default">Export</button>
 <button type="button" id="clearBtn" class="btn btn-default">Clear</button>
 
@@ -76,14 +77,19 @@
 <font color="#FF0004"><i>*Credit to Deathmax for Datamining</br>
 *Please note that the details are expected to change during the maintenance. Recheck at<a href="http://touchandswipe.github.io/bravefrontier/unitsguide"> BFPros Unit Guide</a> after the maintenance.​</i></font>
 <script type="text/javascript">
-var serverSelect="http://picione.github.io/bravefrontier_data/jp/items_light.json";
+var serverSelect="https://picione.github.io/bravefrontier_data/jp/items_light.json";
 var onlyNew=false;
+var onlyHigh=false;
 $(document).on("click","#newBtn", function(e) {
   onlyNew=true;
+})
+$(document).on("click","#highBtn", function(e) {
+  onlyHigh=true;
 })
 $(document).on("click","#clearBtn", function(e) {
   $('#rawTable').empty();
   onlyNew=false;
+  onlyHigh=false;
 })
 $(document).on("click","#exportBtn", function(e) {
 $.getJSON( serverSelect, function( unit ) {
@@ -98,6 +104,13 @@ $.each( unit, function( unitKey, valObj ) {
 				 var idFound=false;
 			}
 			}
+		    } else {
+            var idFound=false;
+			}
+		} 
+		else if (onlyHigh) {
+			if ((valObj.type == "sphere") && (valObj["rarity"] >= "6")) {
+        	var idFound=true;
 		    } else {
             var idFound=false;
 			}
